@@ -1,0 +1,97 @@
+html {
+    background-color: #111111;
+    color: #fff;
+    font-family: Arial, sans-serif;
+}
+
+header {
+    background-color: #0B0B0B;
+    display: flex;
+    justify-content: space-between;
+    padding: 20px;
+}
+
+.logoPng {
+    width: 35%;
+
+}
+
+.tryDiv {
+    margin: 50px 0 50px 0;
+
+}
+
+
+.app {
+    background-color: #111111;
+    color: #fff;
+}
+
+
+main {
+    display: flex;
+}
+
+.buttonSignUp {
+    background-color: #3C0F4B;
+    color: #fff;
+    border: none;
+    padding: 10px 20px;
+    margin: 10px;
+    border-radius: 10px; /* Ajusta este valor para cambiar el grado de redondez */
+    cursor: pointer;
+    text-decoration: none;
+}
+
+.buttonSignUp:hover {
+    color: #fff;
+}
+
+.section {
+    display: flex;
+    justify-content: center;
+    padding: 5%;
+
+}
+
+
+.centerDiv {
+    display: flex;
+    margin: 3%;
+    background-color: #161616;
+    justify-content: center;
+    flex-direction: column;
+    border-radius: 30px;
+}
+
+
+.studio-image {
+    margin: 1%;
+    border-radius: 20px;
+    width: 50%;
+    max-height: 600px;
+    background-color: #111111;
+    background-image: url("https://www.thomann.de/blog/wp-content/uploads/2023/04/techivation-RINfyuHMZLg-unsplash-3-scaled.jpeg");
+    background-size: cover;
+    object-fit: fill;
+}
+
+.content {
+    padding: 5% 0%;
+    margin-left: 10%;
+    text-align: center;
+    width: 50%;
+    max-width: 30%;
+}
+
+.content h1 {
+    font-size: 2em;
+}
+
+.content p {
+    font-size: 1.2em;
+}
+
+.LogIn {
+    color: #8731E4;
+}
