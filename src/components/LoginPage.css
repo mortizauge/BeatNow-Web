@@ -1,11 +1,14 @@
 /* src/components/LoginPage.css */
 
 .login-container {
-    display: flex;
     justify-content: center;
     align-items: center;
-    height: 100vh;
-    background-color: #f0f0f0;
+    background-color: #111111;
+    margin-top: 10%;
+}
+
+label {
+    color: white;
 }
 
 .login-form {
@@ -13,32 +16,92 @@
     flex-direction: column;
     width: 300px;
     padding: 20px;
-    border-radius: 5px;
-    box-shadow: 0px 0px 10px 0px rgba(0,0,0,0.1);
-    background-color: white;
 }
 
 .login-form label {
-    margin-bottom: 10px;
+    margin-bottom: 20px;
+}
+
+.centerDiv {
+    display: flex;
+    margin: 3%;
+    background-color: #161616;
+    justify-content: center;
+    flex-direction: column;
+    border-radius: 30px;
+}
+
+main {
+    min-height: 650px;
+}
+
+section {
+    justify-content: center;
+    width: 50%;
+}
+
+.logoSect {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.dividerVert {
+    width: 1px;
+    background-color: #FFFFFF;
+    margin: 20px 0;
+}
+
+.dividerHori {
+    height: 1px;
+    background-color: #FFFFFF;
+    margin: 20px 0;
+}
+
+.loginContent {
+    display: flex;
+    flex-flow: column;
+    justify-content: center;
+    padding: 5% 0%;
+    margin-left: 10%;
+    text-align: center;
+    align-items: center;
+    width: 50%;
+    max-width: 30%;
+}
+
+.logoPngCenter{
+    max-width: 500px;
+    max-height: 500px;
 }
 
 .login-form input[type="text"], .login-form input[type="password"] {
-    padding: 10px;
-    border-radius: 5px;
-    border: 1px solid #ccc;
+    padding: 20px;
+    height: 25%;
+    border-radius: 15px;
+    margin-bottom: 5%;
+    background-color: #494949;
+    color: white;
+    border-width: 0;
+}
+
+.forgotPwd {
+    text-align: end;
+    text-decoration: none;
+    color: #494949;
 }
 
 .login-form input[type="submit"] {
     margin-top: 20px;
     padding: 10px;
-    border-radius: 5px;
+    border-radius: 10px;
     border: none;
     color: white;
     background-color: #3C0F4B;
     cursor: pointer;
 }
 
-body {
+html {
     background-color: #111111;
 }
 
@@ -49,4 +112,40 @@ body {
     justify-content: center;
     align-items: center;
     color: white;
+}
+
+.googleSignIn {
+    border-radius: 15px;
+    background-color: #FFFFFF;
+    object-fit: contain;
+    margin-right: 2%;
+    width: 100%;
+
+}
+
+.twitterSignIn {
+    border-radius: 15px;
+    background-color: black;
+    object-fit: contain;
+    margin-left: 2%;
+    width: 100%;
+}
+
+.socials {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.twitterLogo {
+    max-width: 50px;
+}
+
+.signUpText {
+    margin-top: 8%;
+}
+
+.signUp {
+    text-decoration: none;
+    color: #8731E4;
 }

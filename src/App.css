@@ -1,0 +1,49 @@
+/* src/App.css */
+
+html {
+    background-color: #111111;
+    color: #fff;
+    font-family: Arial, sans-serif;
+}
+
+header {
+    background-color: #0B0B0B;
+    display: flex;
+    justify-content: space-between;
+    padding: 20px;
+}
+
+.app {
+    background-color: #111111;
+    color: #fff;
+}
+
+.buttonSignUp {
+    background-color: #3C0F4B;
+    color: #fff;
+    border: none;
+    padding: 10px 20px;
+    margin: 10px;
+    border-radius: 10px;
+    cursor: pointer;
+    text-decoration: none;
+}
+
+.buttonSignUp:hover {
+    color: #fff;
+}
+
+.centerDiv {
+    display: flex;
+    margin: 3%;
+    background-color: #161616;
+    justify-content: center;
+    flex-direction: column;
+    border-radius: 30px;
+}
+
+
+
+.LogIn {
+    color: #8731E4;
+}
