@@ -1,0 +1,106 @@
+.upload-btn {
+    background-color: #3C0F4B;
+    color: #fff;
+    border: none;
+    padding: 10px 20px;
+    margin: 10px;
+    border-radius: 10px;
+    cursor: pointer;
+    text-decoration: none;
+}
+
+.drop-beat-png {
+    height: auto;
+    border-radius: 30px;
+}
+
+.drop-beat {
+    display: flex;
+    margin: 2%;
+    max-height: 600px;
+    align-self: center;
+}
+
+.login-form {
+    display: flex;
+    justify-content: center;
+    padding: 3%;
+    width: 100%;
+}
+
+.image-container {
+    position: relative;
+    display: flex;
+    margin: 2%;
+    max-height: 600px;
+    align-self: center;
+}
+
+.caption {
+    border-radius: 20px;
+    width: 300px;
+    height: 500px;
+    background: #A5A5A5;
+}
+
+.upload-btn {
+    display: flex;
+    justify-content: center;
+    padding: 3%;
+    width: 100%;
+
+}
+
+
+.beat-info {
+    display: flex;
+    justify-content: center;
+    padding: 3%;
+}
+
+.caption-and-button {
+    display: flex;
+    justify-content: center;
+    padding: 3% 3% 3%;
+}
+
+.caption {
+    padding: 20px;
+    resize: none;
+    border: none;
+}
+
+.select {
+    padding: 20px;
+    border-radius: 15px;
+    margin-bottom: 5%;
+    background-color: #494949;
+}
+
+.centered-text {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    color: #fff; /* Change this to the color you want for the text */
+    text-align: center;
+}
+
+.lower-centered-text {
+    position: absolute;
+    top: 75%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    color: #fff; /* Change this to the color you want for the text */
+    text-align: center;
+}
+
+.select-container {
+    overflow-block: scroll;
+
+}
+
+.select-container .select__menu-list {
+    direction: ltr;
+    overflow: scroll;
+}
