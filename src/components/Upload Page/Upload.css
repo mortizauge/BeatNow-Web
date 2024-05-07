@@ -1,0 +1,120 @@
+.next-btn {
+    background-color: #3C0F4B;
+    color: #fff;
+    border: none;
+    margin: 15px 0 0 0;
+    border-radius: 20px;
+    cursor: pointer;
+    text-decoration: none;
+    display: flex;
+    justify-content: center;
+    padding-top: 40px;
+    font-size: 28px;
+    width: 300px;
+    height: 130px;
+}
+.next-btn:hover{
+    color: white;
+}
+
+
+.drop-beat {
+    display: flex;
+    margin: 2%;
+    align-self: center;
+    width: 100%; /* Ocupa todo el ancho disponible */
+}
+
+.info-form {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+    padding: 20px;
+}
+
+.info-form input {
+    padding: 20px;
+    height: 25%;
+    border-radius: 15px;
+    margin-bottom: 5%;
+    background-color: #494949;
+    color: white;
+    border-width: 0;
+}
+
+.image-container {
+    position: relative;
+    display: flex;
+    margin: 2%;
+    width: 100%;
+    min-height: 600px;
+    background-image: url("data:image/svg+xml,%3csvg width='100%25' height='100%25' xmlns='http://www.w3.org/2000/svg'%3e%3crect width='100%25' height='100%25' fill='none' rx='25' ry='25' stroke='%23A5A5A5FF' stroke-width='10' stroke-dasharray='30%2c50' stroke-dashoffset='900' stroke-linecap='square'/%3e%3c/svg%3e");
+    border-radius: 25px;
+}
+
+.caption {
+    border-radius: 20px;
+    width: 300px;
+    height: 400px;
+    background: #A5A5A5;
+    padding: 20px;
+    resize: none;
+    border: none;
+}
+
+
+
+
+.beat-info {
+    display: flex;
+    justify-content: center;
+    padding: 3% 0 3% 3%;
+}
+
+.caption-and-button {
+    display: flex;
+    justify-content: center;
+    padding:3% 3% 3% 0;
+    height: 100%;
+}
+
+
+.select {
+    padding-top: 20px;
+    padding-right: 20px;
+    padding-bottom: 20px;
+    border-radius: 15px;
+    margin-bottom: 5%;
+    background-color: #494949;
+    height: 10%;
+}
+
+.centered-text {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    color: #fff; /* Change this to the color you want for the text */
+    text-align: center;
+}
+
+.lower-centered-text {
+    position: absolute;
+    top: 75%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    color: #fff; /* Change this to the color you want for the text */
+    text-align: center;
+}
+
+.select-container {
+    overflow-block: scroll;
+}
+
+.select-container .select__menu-list {
+    direction: ltr;
+    overflow: scroll;
+}
+
+

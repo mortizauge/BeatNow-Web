@@ -42,7 +42,14 @@ header {
     border-radius: 30px;
 }
 
+Link {
+    text-decoration: none;
+    color: #fff;
+}
 
+Link:hover {
+    color: #fff;
+}
 
 .LogIn {
     color: #8731E4;
