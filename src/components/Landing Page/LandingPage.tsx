@@ -13,6 +13,7 @@ function Landing() {
                 <Link className="logo" to={"/"}>
                     <img className="logoPng" src={logo} alt="Logo"/>
                 </Link>
+                <Link className="upload" to="/Upload">Upload</Link>
                 <Link className={"buttonSignUp"} to="/register">Sign up</Link>
             </header>
 
