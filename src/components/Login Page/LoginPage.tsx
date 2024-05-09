@@ -79,6 +79,7 @@ function LoginPage() {
                 const data = await response.json();
                 // El inicio de sesión fue exitoso
                 localStorage.setItem('token', data.access_token);
+                console.log(data.access_token);
                 await getUserInfo();
             } else {
                 // El inicio de sesión falló
@@ -99,7 +100,11 @@ function LoginPage() {
 
         try {
             const response: AxiosResponse = await axios.get(url, { headers });
+            if (response.status === 200) {
+                navigateToUpload(localStorage.getItem('token'));
+            }
             return response.data;
+
         } catch (error) {
             // Manejo de errores
             // @ts-ignore
@@ -108,7 +113,13 @@ function LoginPage() {
         }
     }
 
-            return (
+    function navigateToUpload(token: string | null) {
+        navigate('/upload', { state: { token } });
+    }
+
+
+
+    return (
                 <div className={"app"}>
                     <header>
                         <Link className="logo" to={"/"}>

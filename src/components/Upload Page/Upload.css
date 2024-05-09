@@ -44,6 +44,7 @@
 }
 
 .image-container {
+    cursor: pointer;
     position: relative;
     display: flex;
     margin: 2%;
@@ -51,6 +52,10 @@
     min-height: 600px;
     background-image: url("data:image/svg+xml,%3csvg width='100%25' height='100%25' xmlns='http://www.w3.org/2000/svg'%3e%3crect width='100%25' height='100%25' fill='none' rx='25' ry='25' stroke='%23A5A5A5FF' stroke-width='10' stroke-dasharray='30%2c50' stroke-dashoffset='900' stroke-linecap='square'/%3e%3c/svg%3e");
     border-radius: 25px;
+    z-index: 100;
+}
+.image-container.dragging {
+    background-color: rgba(255, 255, 255, 0.15); /* Cambia esto al color que quieras */
 }
 
 .caption {
@@ -115,6 +120,10 @@
 .select-container .select__menu-list {
     direction: ltr;
     overflow: scroll;
+}
+
+.centered-text, .lower-centered-text {
+    pointer-events: none; /* Esto evitará que estos elementos intercepten eventos de arrastre */
 }
 
 

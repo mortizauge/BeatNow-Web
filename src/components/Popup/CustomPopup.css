@@ -1,0 +1,36 @@
+.custom-popup {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+}
+
+.custom-popup-content {
+    position: relative; /* Agregar esta línea para permitir el posicionamiento absoluto de los elementos hijos */
+    background-color: #111111;
+    padding: 30px;
+    border-radius: 10px;
+    width: 80%;
+    max-width: 500px;
+    min-height: 150px;
+}
+
+.closeBtn {
+    position: absolute; /* Posicionar absolutamente el botón de cierre */
+    bottom: 10px; /* Posicionarlo 10px desde la parte superior del contenido del pop-up */
+    right: 10px; /* Posicionarlo 10px desde la parte derecha del contenido del pop-up */
+    background-color: #3C0F4B;
+    color: #fff;
+    border: none;
+    padding: 10px 20px;
+    margin: 10px;
+    border-radius: 10px;
+    cursor: pointer;
+    text-decoration: none;
+}
