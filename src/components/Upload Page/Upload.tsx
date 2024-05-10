@@ -1,15 +1,20 @@
-// src/components/LandingPage.tsx
+// src/components/Upload.tsx
 
 import React, {useEffect, useState} from 'react';
-import { Link } from 'react-router-dom';
+
+import { Link, useNavigate } from 'react-router-dom';
+
 import '../Landing Page/LandingPage.css';
 import logo from '../../assets/Logo.png';
+import rightarrow from '../../assets/siguiente-pista.png';
 import rect from '../../assets/Rectangle 58.png';
 import './Upload.css';
 import Select from 'react-select'
 import GlobalSelect from "../Global Components/GlobalSelect";
 import axios, {AxiosResponse} from "axios";
 import CustomPopup from '../Popup/CustomPopup';
+import { createRealTimeBpmProcessor, getBiquadFilter } from 'realtime-bpm-analyzer';
+
 
 
 function Upload(...props: any) {
@@ -17,20 +22,28 @@ function Upload(...props: any) {
     const [username, setUsername] = useState('');
     const [selectedFile, setSelectedFile] = useState<File | null>(null);
     const [showPopup, setShowPopup] = useState(false);
+    const [tokenExists, setTokenExists] = useState<boolean>(true); // Track if token exists
+    const [bpm, setBpm] = useState<number | null>(null); // State to store the detected BPM
+    const [formValid, setFormValid] = useState(false);
+
 
 
     useEffect(() => {
         const token = localStorage.getItem('token');
-        if (token) {
+        if (!token) {
+            setTokenExists(false);
+            setShowPopup(true); // Show popup if token is null
+        } else {
             getUserInfo(token);
         }
     }, []);
+
 
     async function getUserInfo(token: string): Promise<any> {
         const url = 'http://217.182.70.161:6969/v1/api/users/users/me';
         const headers = {
             'accept': 'application/json',
-            'Authorization': `Bearer ${token}`
+            'Authorization': `Bearer ${token}` // Corrected string interpolation
         };
 
         try {
@@ -44,6 +57,7 @@ function Upload(...props: any) {
         }
     }
 
+
     // Referencia al elemento de entrada del archivo
     const fileInputRef = React.useRef<HTMLInputElement>(null);
 
@@ -55,12 +69,53 @@ function Upload(...props: any) {
     };
 
     // Controlador de eventos para el cambio en el elemento de entrada del archivo
-    const onFileInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const onFileInputChange = async (event: React.ChangeEvent<HTMLInputElement>) => {
         const file = event.target.files ? event.target.files[0] : null;
         if (file && !['audio/wav', 'audio/mpeg', 'audio/flac'].includes(file.type)) {
             setShowPopup(true);
-        } else {
+        } else if (file) { // Add this check
             setSelectedFile(file);
+
+            // Create an AudioContext
+            const audioContext = new (window.AudioContext || window.AudioContext)();
+            const lowpass = getBiquadFilter(audioContext);
+
+            // Create a RealTimeBpmProcessor
+            const realtimeAnalyzerNode = await createRealTimeBpmProcessor(audioContext);
+
+            // Load the audio file
+            const reader = new FileReader();
+            reader.onload = function(e) {
+
+                // check if file was loaded
+                if (!e.target) {
+                    console.error('Error al cargar el archivo.');
+                }
+                const arrayBuffer = e.target?.result;
+                if (arrayBuffer instanceof ArrayBuffer) {
+                    audioContext.decodeAudioData(arrayBuffer, function(buffer) {
+                        // Create a buffer source
+                        const source = audioContext.createBufferSource();
+                        source.buffer = buffer;
+
+                        source.connect(lowpass).connect(realtimeAnalyzerNode);
+
+                        // Connect the source to the RealTimeBpmProcessor
+                        source.connect(realtimeAnalyzerNode);
+
+                        // Start the source
+                        source.start();
+
+                        // Process the audio data to calculate the BPM
+                        realtimeAnalyzerNode.port.onmessage = (event) => {
+                            if (event.data.message === 'BPM_STABLE') {
+                                console.log('BPM_STABLE', event.data.data.bpm);
+                            }
+                        }
+                    });
+                }
+            };
+            reader.readAsArrayBuffer(file); // file is guaranteed to be non-null here
         }
     };
 
@@ -111,10 +166,11 @@ function Upload(...props: any) {
     ]
 
     return (
+
         <div className="app">
             {showPopup && (
                 <CustomPopup
-                    message="File format not supported. Please upload a .wav, .mp3, or .flac file."
+                    message={tokenExists ? "File format not supported. Please upload a .wav, .mp3, or .flac file." : "Session expired. You will be redirected to the login page."}
                     onClose={() => setShowPopup(false)}
                 />
             )}
@@ -174,7 +230,8 @@ function Upload(...props: any) {
                             )}
                             <input
                                 type="text"
-                                value={username}
+                                placeholder={username}
+                                defaultValue={username}
                             />
                             <input
                                 type="text"
@@ -205,10 +262,10 @@ function Upload(...props: any) {
                     </section>
                     <section className="caption-and-button">
                         <form className="login-form">
-                            <textarea className={"caption"} spellCheck={false}
-                                      placeholder="Add a caption or a description for this beat..."
-                            />
-                            <Link className={"next-btn"} to={"/uploadnext"}>Next</Link>
+
+                            <Link className={"next-btn"} to={"/uploadnext"}>
+                                <img className={"next-btn-img"} src={rightarrow} alt="Next"/>
+                            </Link>
                         </form>
                     </section>
                 </main>

@@ -1,6 +1,8 @@
 // src/components/GlobalSelect.tsx
 import React from 'react';
 import Select from 'react-select';
+import makeAnimated from 'react-select/animated';
+
 
 interface GlobalSelectProps {
     options: { value: string, label: string }[];
@@ -8,7 +10,11 @@ interface GlobalSelectProps {
     isMulti?: boolean;
     placeholder?: string;
     onChange?: (selectedOption: any) => void;
+    components?: any;
 }
+
+const animatedComponents = makeAnimated();
+
 
 const GlobalSelect: React.FC<GlobalSelectProps> = ({
                                                        options,
@@ -16,12 +22,15 @@ const GlobalSelect: React.FC<GlobalSelectProps> = ({
                                                        isMulti,
                                                        placeholder,
                                                        onChange,
+                                                       components = animatedComponents,
+
                                                    }) => {
     const commonStyles = {
         backgroundColor: '#494949',
         color: 'white',
         cursor: 'pointer',
         margin: '0 0 0 10px',
+        borderRadius: '20px',
     };
 
     return (
@@ -33,22 +42,35 @@ const GlobalSelect: React.FC<GlobalSelectProps> = ({
                 isMulti={isMulti}
                 placeholder={placeholder}
                 onChange={onChange}
+                components={components}
                 styles={{
-                    control: (provided) => ({...provided,...commonStyles, boxShadow: 'white', border: 'none', borderRadius: '0px'}),
+                    option: (provided, state) => ({
+                        ...provided,
+                        borderRadius: '20px', // Ajusta este valor según tus necesidades
+
+                    }),
+                    control: (provided) => ({...provided,...commonStyles, boxShadow: 'white', border: 'none', borderRadius: '20px'}),
                     menuList: (base) => ({
                         ...base,
+                        margin: '5px',
                         '::-webkit-scrollbar': {
                             width: '10px',
                             height: '0px',
                         },
                         '::-webkit-scrollbar-track': {
                             background: '#494949',
+
                         },
                         '::-webkit-scrollbar-thumb': {
                             background: '#888',
+                            borderRadius: '20px',
+
                         },
                         '::-webkit-scrollbar-thumb:hover': {
-                            background: '#555',
+                            background: '#777',
+                        },
+                        '::-webkit-scrollbar-thumb:active': {
+                            background: '#666',
                         }
                     }),
                     input: (provided, state) => ({
@@ -65,6 +87,7 @@ const GlobalSelect: React.FC<GlobalSelectProps> = ({
                         padding: '0px !important',
                         minHeight: '40px !important',
                         display: 'flex !important',
+                        borderRadius: '20px !important',
                     }),
                 }}
                 theme={(theme) => ({
@@ -73,11 +96,12 @@ const GlobalSelect: React.FC<GlobalSelectProps> = ({
                         ...theme.colors,
                         text: 'black',
                         primary25: '#3C0F4B',
+                        primary50: '#3C0F4B',
                         primary: 'black',
                         background: '#494949',
                         neutral0: '#494949',
-                        border: 'black',
-                        borderRadius: '0px !important',
+                        border: 'none',
+                        borderRadius: '20px !important',
                     },
                 })}
             />

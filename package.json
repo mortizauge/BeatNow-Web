@@ -18,7 +18,8 @@
     "react-dropdown-input": "^0.1.11",
     "react-router-dom": "^6.22.3",
     "react-select": "^5.8.0",
-    "react-transition-group": "^4.4.5"
+    "react-transition-group": "^4.4.5",
+    "realtime-bpm-analyzer": "^4.0.2"
   },
   "devDependencies": {
     "@types/react": "^18.0.27",
