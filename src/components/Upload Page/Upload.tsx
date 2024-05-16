@@ -1,6 +1,6 @@
 // src/components/Upload.tsx
 
-import React, {useEffect, useState} from 'react';
+import React, {FormEvent, useEffect, useState} from 'react';
 
 import { Link, useNavigate } from 'react-router-dom';
 
@@ -13,30 +13,158 @@ import Select from 'react-select'
 import GlobalSelect from "../Global Components/GlobalSelect";
 import axios, {AxiosResponse} from "axios";
 import CustomPopup from '../Popup/CustomPopup';
-import { createRealTimeBpmProcessor, getBiquadFilter } from 'realtime-bpm-analyzer';
+import {Simulate} from "react-dom/test-utils";
+import submit = Simulate.submit;
+import { TagsInput } from 'react-tag-input-component';
 
+interface Beat {
+    beatTitle: string;
+    beatUsername: string;
+    beatGenre: string;
+    beatInstruments: string[];
+    beatTags: string[];
+    beatBpm: number;
+    beatFile: File | null;
+}
 
-
-function Upload(...props: any) {
+function Upload() {
+    // Estados para los campos del formulario
+    const [title, setTitle] = useState("");
+    const [genre, setGenre] = useState("");
+    const [instruments, setInstruments] = useState<string[]>([]);
+    const [tags, setTags] = useState<string[]>([]);
+    const [bpmValue, setBpmValue] = useState("");
     const [dragging, setDragging] = useState(false);
-    const [username, setUsername] = useState('');
+    const [username, setUsername] = useState("");
     const [selectedFile, setSelectedFile] = useState<File | null>(null);
     const [showPopup, setShowPopup] = useState(false);
-    const [tokenExists, setTokenExists] = useState<boolean>(true); // Track if token exists
-    const [bpm, setBpm] = useState<number | null>(null); // State to store the detected BPM
-    const [formValid, setFormValid] = useState(false);
+    const [tokenExists, setTokenExists] = useState<boolean>(true);
+    const [bpm, setBpm] = useState<number | null>(null);
+    const [termsAccepted, setTermsAccepted] = useState(false);
+    const [noCopyrightInfringement, setNoCopyrightInfringement] = useState(false);
+    const [validFile, setValidFile] = useState(false);
+    const [submitted, setSubmitted] = useState(false);
+    const [file, setFile] = useState<File | null>(null);
+    const [message, setMessage] = useState<string>("");
+    const [selected, setSelected] = useState([]);
+    const [beat, setBeat] = useState<Beat>({
+        beatTitle: "",
+        beatUsername: "",
+        beatGenre: "",
+        beatInstruments: [],
+        beatTags: [],
+        beatBpm: 0,
+        beatFile: null,
+    });
 
 
+
+    const navigate = useNavigate();
 
     useEffect(() => {
-        const token = localStorage.getItem('token');
-        if (!token) {
+        const token = localStorage.getItem("token");
+
+        if (!token || !tokenExists) {
             setTokenExists(false);
-            setShowPopup(true); // Show popup if token is null
-        } else {
-            getUserInfo(token);
+            setMessage("Session has expired, redirecting to login page");
+            setShowPopup(true);
+            return;
         }
-    }, []);
+
+        const url = "http://217.182.70.161:6969/v1/api/users/users/me";
+        const headers = {
+            accept: "application/json",
+            Authorization: `Bearer ${token}`,
+        };
+        axios
+            .get(url, { headers })
+            .then((response) => {
+                if (response.status === 200) {
+                    setUsername(response.data.username);
+                    console.log("Información del usuario:", response.data);
+                }
+            })
+            .catch((error) => {
+                console.error("Error al obtener la información del usuario.");
+                setTokenExists(false);
+                setShowPopup(true);
+                localStorage.removeItem("token");
+                navigate("/login");
+            });
+    }, [navigate]);
+
+    useEffect(() => {
+        if (submitted) {
+            console.log(beat);
+            // save beat to local storage
+            localStorage.setItem("beat", JSON.stringify(beat));
+            navigate("/uploadnext");
+        }
+    }, [beat, submitted, navigate]);
+
+    useEffect(() => {
+        if (selectedFile) {
+            // Lógica que depende del archivo seleccionado
+            console.log(selectedFile);
+        }
+    }, [selectedFile]);
+
+
+
+    const handleSubmit = (event: FormEvent) => {
+        event.preventDefault();
+
+        // print all fields to console
+        console.log(title);
+        console.log(username);
+        console.log(genre);
+        console.log(instruments);
+        console.log(tags);
+        console.log(bpmValue);
+        console.log(selectedFile);
+
+
+        // Comprobaciones de los campos
+        if (!title || !username || !genre || instruments.length === 0 || tags.length === 0 || !bpmValue) {
+            setMessage("Please fill in all fields.");
+            setShowPopup(true);
+            return;
+        }
+        else if (!selectedFile) {
+            setMessage("Please upload a file.");
+            setShowPopup(true);
+            return;
+        }
+
+        if (!termsAccepted || !noCopyrightInfringement) {
+            setMessage("Please accept the terms and conditions and confirm that you are not uploading copyrighted content");
+            setShowPopup(true);
+            setSubmitted(false);
+            return;
+        } else {
+            // Actualizar el estado del beat
+            setBeat({
+                beatTitle: title,
+                beatUsername: username,
+                beatGenre: genre,
+                beatInstruments: instruments,
+                beatTags: tags,
+                beatBpm: bpmValue,
+                beatFile: selectedFile,
+            });
+            setSubmitted(true);
+        }
+    };
+
+
+    const handleClose = () => {
+        const token = localStorage.getItem("token");
+        if (!token || !tokenExists) {
+            //navigate("/login");
+        }
+        setShowPopup(false);
+    };
+
 
 
     async function getUserInfo(token: string): Promise<any> {
@@ -72,53 +200,15 @@ function Upload(...props: any) {
     const onFileInputChange = async (event: React.ChangeEvent<HTMLInputElement>) => {
         const file = event.target.files ? event.target.files[0] : null;
         if (file && !['audio/wav', 'audio/mpeg', 'audio/flac'].includes(file.type)) {
+            setValidFile(false);
+            setMessage("File format not supported. Please upload a .wav, .mp3, or .flac file");
             setShowPopup(true);
-        } else if (file) { // Add this check
+
+        } else {
+            setValidFile(true);
             setSelectedFile(file);
-
-            // Create an AudioContext
-            const audioContext = new (window.AudioContext || window.AudioContext)();
-            const lowpass = getBiquadFilter(audioContext);
-
-            // Create a RealTimeBpmProcessor
-            const realtimeAnalyzerNode = await createRealTimeBpmProcessor(audioContext);
-
-            // Load the audio file
-            const reader = new FileReader();
-            reader.onload = function(e) {
-
-                // check if file was loaded
-                if (!e.target) {
-                    console.error('Error al cargar el archivo.');
-                }
-                const arrayBuffer = e.target?.result;
-                if (arrayBuffer instanceof ArrayBuffer) {
-                    audioContext.decodeAudioData(arrayBuffer, function(buffer) {
-                        // Create a buffer source
-                        const source = audioContext.createBufferSource();
-                        source.buffer = buffer;
-
-                        source.connect(lowpass).connect(realtimeAnalyzerNode);
-
-                        // Connect the source to the RealTimeBpmProcessor
-                        source.connect(realtimeAnalyzerNode);
-
-                        // Start the source
-                        source.start();
-
-                        // Process the audio data to calculate the BPM
-                        realtimeAnalyzerNode.port.onmessage = (event) => {
-                            if (event.data.message === 'BPM_STABLE') {
-                                console.log('BPM_STABLE', event.data.data.bpm);
-                            }
-                        }
-                    });
-                }
-            };
-            reader.readAsArrayBuffer(file); // file is guaranteed to be non-null here
         }
     };
-
     const onDragOver = (event: React.DragEvent<HTMLDivElement>) => {
         event.preventDefault();
     };
@@ -138,15 +228,31 @@ function Upload(...props: any) {
         setDragging(false);
         const file = event.dataTransfer.files ? event.dataTransfer.files[0] : null;
         if (file && !['audio/wav', 'audio/mpeg', 'audio/flac'].includes(file.type)) {
+            setValidFile(false);
+            setMessage("File format not supported. Please upload a .wav, .mp3, or .flac file");
             setShowPopup(true);
         } else {
+            setValidFile(true);
             setSelectedFile(file);
         }
     };
 
+    const handleTagsChange = (tags: string[]) => {
+        // Prepend '#' to each tag
+        const updatedTags = tags.map(tag => tag.startsWith('#') ? tag : `#${tag}`);
+        setTags(updatedTags);
+    };
+
+    const beforeAddTagsInput = (tag: string, existingTags: string[]) => {
+        // verify if tag is already in the list taking '#' into account
+        const tagExists = existingTags.includes(tag) || existingTags.includes(`#${tag}`);
+        return !tagExists;
+    };
 
 
-    const instruments = [
+
+
+    const instrumentsList = [
         { value: 'guitar', label: 'Guitar' },
         { value: 'bass', label: 'Bass' },
         { value: 'flute', label: 'Flute' },
@@ -158,11 +264,29 @@ function Upload(...props: any) {
         { value: 'brass', label: 'Brass' },
         { value: 'harp', label: 'Harp'}
     ]
-    const tags = [
-        { label: '#KanyeTypeBeat', value: 'KanyeTypeBeat' },
-        { label: '#UKdrill', value: 'UKdrill' },
-        { label: '#2024BeatNowFest', value: '2024BeatNowFest' },
-        { label: '#90sHipHop', value: '90sHipHop' }
+    const moodsList = [
+        { value: 'happy', label: 'Happy' },
+        { value: 'sad', label: 'Sad' },
+        { value: 'aggressive', label: 'Aggressive' },
+        { value: 'calm', label: 'Calm' },
+        { value: 'energetic', label: 'Energetic' },
+        { value: 'relaxed', label: 'Relaxed' },
+        { value: 'excited', label: 'Excited' },
+        { value: 'melancholic', label: 'Melancholic' },
+        { value: 'romantic', label: 'Romantic' },
+        { value: 'nostalgic', label: 'Nostalgic' }
+    ]
+    const genresList = [
+        { value: 'trap', label: 'Trap' },
+        { value: 'hiphop', label: 'Hip-Hop' },
+        { value: 'pop', label: 'Pop' },
+        { value: 'rock', label: 'Rock' },
+        { value: 'jazz', label: 'Jazz' },
+        { value: 'reggae', label: 'Reggae' },
+        { value: 'rnb', label: 'R&B' },
+        { value: 'country', label: 'Country' },
+        { value: 'blues', label: 'Blues' },
+        { value: 'metal', label: 'Metal' }
     ]
 
     return (
@@ -170,15 +294,16 @@ function Upload(...props: any) {
         <div className="app">
             {showPopup && (
                 <CustomPopup
-                    message={tokenExists ? "File format not supported. Please upload a .wav, .mp3, or .flac file." : "Session expired. You will be redirected to the login page."}
-                    onClose={() => setShowPopup(false)}
+                    message={message}
+                    onClose={handleClose}
                 />
             )}
             <header>
                 <Link className="logo" to={"/"}>
                     <img className="logoPng" src={logo} alt="Logo"/>
                 </Link>
-                <Link className={"buttonSignUp"} to="/register">Sign up</Link>
+
+                <Link className={"userBtn"} to="/upload">{username}</Link>
             </header>
 
             <div className="centerDiv">
@@ -216,56 +341,81 @@ function Upload(...props: any) {
 
                     <section className="beat-info">
                         <form className="info-form">
-
-                            {selectedFile ? (
-                                <input
-                                    type="text"
-                                    placeholder={selectedFile.name}
-                                />
-                            ) : (
-                                <input
-                                    type="text"
-                                    placeholder="Title"
-                                />
-                            )}
                             <input
                                 type="text"
-                                placeholder={username}
-                                defaultValue={username}
+                                placeholder="Title"
+                                value={title}
+                                onChange={(e) => setTitle(e.target.value)}
                             />
                             <input
-                                type="text"
-                                placeholder="Genre"
-                            />
-                            <div className="select-container">
-                                <GlobalSelect
-                                    options={instruments}
-                                    isSearchable={true}
-                                    isMulti={true}
-                                    placeholder="Instruments"
-                                />
-                            </div>
-                            <input
-                                type="text"
+                                type="number"
+                                max={300}
+                                min={1}
                                 placeholder="BPM"
+                                value={bpmValue}
+                                onChange={(e) => setBpmValue(e.target.value)}
                             />
-                            <div className="select-container">
-                                <GlobalSelect
-                                    options={tags}
-                                    isSearchable={true}
-                                    isMulti={true}
-                                    placeholder="#Tags"
-                                />
-                            </div>
+                            <TagsInput
+                                value={tags}
+                                onChange={handleTagsChange}
+                                beforeAddValidate={beforeAddTagsInput}
+                                name="tags"
+                                placeHolder="#Tags"
+                            />
+                            <GlobalSelect
+                                options={moodsList}
+                                isSearchable={true}
+                                isMulti={true}
+                                placeholder="Mood"
+                                onChange={(selected) => setGenre(selected ? selected.value : "")}
+                            />
+                            <GlobalSelect
+                                options={genresList}
+                                isSearchable={true}
+                                isMulti={false}
+                                placeholder="Genres"
+                                onChange={(selected) => setGenre(selected ? selected.value : "")}
+                            />
+                            <GlobalSelect
+                                options={instrumentsList}
+                                isSearchable={true}
+                                isMulti={true}
+                                placeholder="Instruments"
+                                onChange={(selected) => setInstruments(selected ? selected.map(item => item.value) : [])}
+                            />
+
 
                         </form>
                     </section>
                     <section className="caption-and-button">
-                        <form className="login-form">
+                        <form className="next-form" onSubmit={handleSubmit}>
+                            <div className={"checkboxes"}>
+                                <div className={"termsCheckbox"}>
+                                    <input
+                                        className="checkbox"
+                                        type="checkbox"
+                                        id="terms"
+                                        checked={termsAccepted}
+                                        onChange={() => setTermsAccepted(!termsAccepted)}
+                                    />
+                                    <label className="termsTxt">I have read and accept the terms and conditions</label>
+                                </div>
+                                <div className={"copyrightCheckBox"}>
+                                    <input
+                                        className="checkbox"
+                                        type="checkbox"
+                                        id="copyright"
+                                        checked={noCopyrightInfringement}
+                                        onChange={() => setNoCopyrightInfringement(!noCopyrightInfringement)}
+                                    />
+                                    <label className="copyrightTxt">I confirm that I am not uploading copyrighted
+                                        content</label>
+                                </div>
 
-                            <Link className={"next-btn"} to={"/uploadnext"}>
+                            </div>
+                            <button className={"next-btn"} type="submit">
                                 <img className={"next-btn-img"} src={rightarrow} alt="Next"/>
-                            </Link>
+                            </button>
                         </form>
                     </section>
                 </main>

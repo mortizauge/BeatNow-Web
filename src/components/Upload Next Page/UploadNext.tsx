@@ -28,6 +28,8 @@ function UploadNext() {
         { label: '#2024BeatNowFest', value: '2024BeatNowFest' },
         { label: '#90sHipHop', value: '90sHipHop' }
     ]
+
+    console.log(localStorage.getItem("beat"));
     return (
         <div className="app">
             <header>
