@@ -66,6 +66,10 @@ function UploadNext() {
 
 
     console.log(localStorage.getItem("beat"));
+
+    const handleSumbit = () => {
+
+    }
     return (
         <div className="app">
             <header>
@@ -83,7 +87,7 @@ function UploadNext() {
                             />
                     </section>
                     <section className="next-drop-pic dragging-parent">
-                        <form className={"next-form"}>
+                        <form className={"next-form"} onSubmit={handleSumbit}>
                             <div
                             className={`next-image-container ${selectedFile ? 'file-selected' : ''} ${dragging ? 'dragging' : ''}`}
                             onClick={onImageContainerClick}
@@ -114,7 +118,7 @@ function UploadNext() {
                                 </>
                             )}
                         </div>
-                            <button className={"upload-btn"}><b>Upload Beat</b></button>
+                            <button className={"upload-btn"} type={"submit"}><b>Upload Beat</b></button>
                         </form>
                     </section>
 

@@ -15,7 +15,8 @@ import axios, {AxiosResponse} from "axios";
 import CustomPopup from '../Popup/CustomPopup';
 import {Simulate} from "react-dom/test-utils";
 import submit = Simulate.submit;
-import { TagsInput } from 'react-tag-input-component';
+// @ts-ignore
+import { TagsInput } from "react-tag-input-component";
 
 interface Beat {
     beatTitle: string;
@@ -149,7 +150,7 @@ function Upload() {
                 beatGenre: genre,
                 beatInstruments: instruments,
                 beatTags: tags,
-                beatBpm: bpmValue,
+                beatBpm: parseInt(bpmValue),
                 beatFile: selectedFile,
             });
             setSubmitted(true);
@@ -382,7 +383,7 @@ function Upload() {
                                 isSearchable={true}
                                 isMulti={true}
                                 placeholder="Instruments"
-                                onChange={(selected) => setInstruments(selected ? selected.map(item => item.value) : [])}
+                                onChange={(selected) => setInstruments(selected ? selected.map((item: { value: any; }) => item.value) : [])}
                             />
 
 
