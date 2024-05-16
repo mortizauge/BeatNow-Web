@@ -302,6 +302,7 @@ function Upload() {
                 <Link className="logo" to={"/"}>
                     <img className="logoPng" src={logo} alt="Logo"/>
                 </Link>
+                <Link to={"/uploadnext"}>uploadnext</Link>
 
                 <Link className={"userBtn"} to="/upload">{username}</Link>
             </header>
