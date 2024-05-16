@@ -104,8 +104,6 @@
     display: flex;
     justify-content: center;
     align-items: center;
-
-
 }
 .registerContent {
     display: grid;
@@ -147,12 +145,6 @@
     color: white;
     border-width: 0;
 }
-
-
-
-
-
-
 .signIn {
     text-decoration: none;
     color: #8731E4;
