@@ -5,10 +5,10 @@ import './LoginPage.css';
 import logo from "../../assets/Logo.png";
 import logo2 from "../../assets/Frame 2.png";
 import {Link} from "react-router-dom";
-import Upload from "../Upload Page/Upload";
+import Upload from "../UploadScreens/Upload1/Upload";
 import {useNavigate} from 'react-router-dom';
 import axios, {AxiosResponse} from 'axios';
-import CustomPopup from "../Popup/CustomPopup";
+import CustomPopup from "../../components/Popup/CustomPopup";
 
 
 function LoginPage() {

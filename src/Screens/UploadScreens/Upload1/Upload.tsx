@@ -2,9 +2,9 @@
 
 import React from 'react';
 import { Link } from 'react-router-dom';
-import './LandingPage.css';
-import logo from '../assets/Logo.png';
-import rect from '../assets/Rectangle 58.png';
+import '../../Landing Page/LandingPage.css';
+import logo from '../../../assets/Logo.png';
+import rect from '../../../assets/Rectangle 58.png';
 import './Upload.css';
 import Select from 'react-select'
 
@@ -131,7 +131,7 @@ function Upload() {
                             <textarea className={"caption"}
                                 placeholder="Add a caption or a description for this beat..."
                             />
-                            <Link className={"upload-btn"} to={"/"}>Upload</Link>
+                            <Link className={"upload-btn"} to={"/UploadNext"}>Upload</Link>
                         </form>
                     </section>
                 </main>

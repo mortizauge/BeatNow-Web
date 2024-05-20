@@ -2,12 +2,12 @@
 
 import React from 'react';
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
-import LoginPage from './components/Login Page/LoginPage';
-import Landing from "./components/Landing Page/LandingPage";
-import SignUpPage from "./components/Sign Up Page/SignUpPage";
+import LoginPage from '../src/Screens/Login Page/LoginPage';
+import Landing from "./Screens/Landing Page/LandingPage";
+import SignUpPage from "./Screens/Sign Up Page/SignUpPage";
 import './App.css';
-import Upload from "./components/Upload Page/Upload";
-import UploadNext from "./components/Upload Next Page/UploadNext";
+import Upload from "../src/Screens/UploadScreens/Upload1/Upload"
+import UploadNext from "../src/Screens/UploadScreens/Upload2/UploadNext";
 
 function App() {
     return (

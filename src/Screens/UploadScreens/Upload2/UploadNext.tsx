@@ -2,12 +2,11 @@
 
 import React, { useRef, useState } from 'react';
 import { Link } from 'react-router-dom';
-import '../Landing Page/LandingPage.css';
-import logo from '../../assets/Logo.png';
+import '../../Landing Page/LandingPage.css';
+import logo from '../../../assets/Logo.png';
 import rect from '../../assets/Rectangle 58.png';
 import './UploadNext.css';
 import Select from 'react-select'
-import GlobalSelect from "../Global Components/GlobalSelect";
 
 function UploadNext() {
     const instruments = [
