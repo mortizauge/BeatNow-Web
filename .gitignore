@@ -5,6 +5,7 @@
 /httpRequests/
 # Dependencias de node
 /node_modules/
+node_modules/
 
 # Directorio de salida de build de Vite
 /dist/

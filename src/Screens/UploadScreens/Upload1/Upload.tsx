@@ -4,19 +4,20 @@ import React, {FormEvent, useEffect, useState} from 'react';
 
 import { Link, useNavigate } from 'react-router-dom';
 
-import '../Landing Page/LandingPage.css';
-import logo from '../../assets/Logo.png';
-import rightarrow from '../../assets/siguiente-pista.png';
-import rect from '../../assets/Rectangle 58.png';
+import '../../Landing Page/LandingPage.css';
+import logo from '../../../assets/Logo.png';
+import rightarrow from '../../../assets/siguiente-pista.png';
+import rect from '../../../assets/Rectangle 58.png';
 import './Upload.css';
 import Select from 'react-select'
-import GlobalSelect from "../Global Components/GlobalSelect";
+import GlobalSelect from "../../../components/Global Components/GlobalSelect";
 import axios, {AxiosResponse} from "axios";
-import CustomPopup from '../Popup/CustomPopup';
+import CustomPopup from '../../../components/Popup/CustomPopup';
 import {Simulate} from "react-dom/test-utils";
 import submit = Simulate.submit;
 // @ts-ignore
 import { TagsInput } from "react-tag-input-component";
+import Header from "../../../Layout/Header/Header";
 
 interface Beat {
     beatTitle: string;
@@ -296,14 +297,8 @@ function Upload() {
                 message={message}
                 onClose={handleClose}
             />}
-        <header>
-            <Link className="logo" to={"/"}>
-                <img className="logoPng" src={logo} alt="Logo"/>
-            </Link>
-            <Link to={"/uploadnext"}>uploadnext</Link>
 
-            <Link className={"userBtn"} to="/upload">{username}</Link>
-        </header>
+        <Header />
 
         <div className="centerDiv">
             <main>

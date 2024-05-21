@@ -5,10 +5,11 @@ import './LoginPage.css';
 import logo from "../../assets/Logo.png";
 import logo2 from "../../assets/Frame 2.png";
 import {Link} from "react-router-dom";
-import Upload from "../Upload Page/Upload";
 import {useNavigate} from 'react-router-dom';
 import axios, {AxiosResponse} from 'axios';
-import CustomPopup from "../Popup/CustomPopup";
+import CustomPopup from "../../components/Popup/CustomPopup";
+import UserSingleton from "../../Model/UserSingleton";
+import Header from "../../Layout/Header/Header";
 
 
 function LoginPage() {
@@ -18,6 +19,12 @@ function LoginPage() {
     const [showPopup, setShowPopup] = useState(false); // Nuevo estado para controlar el popup
     const [message, setMessage] = useState(''); // Nuevo estado para mostrar el mensaje
 
+    interface UserData {
+        full_name: string;
+        username: string;
+        email: string;
+        id: string;
+    }
 
     const handleUsernameChange = (event: React.ChangeEvent<HTMLInputElement>) => {
         setUsername(event.target.value);
@@ -101,31 +108,39 @@ function LoginPage() {
         }
     }
 
-
-    async function getUserInfo(): Promise<any> {
+    async function getUserInfo(): Promise<UserData | void> {
         const url = 'http://217.182.70.161:6969/v1/api/users/users/me';
+        const token = localStorage.getItem('token');
         const headers = {
             'accept': 'application/json',
-            'Authorization': `Bearer ${localStorage.getItem('token')}`
+            'Authorization': `Bearer ${token}`
         };
 
         try {
-            const response: AxiosResponse = await axios.get(url, {headers});
+            const response: AxiosResponse<UserData> = await axios.get<UserData>(url, { headers });
             if (response.status === 200) {
-                navigateToUpload(localStorage.getItem('token'));
-            }
-            return response.data;
+                const data = response.data;
+                const user = UserSingleton.getInstance();
+                user.setFullName(data.full_name);
+                user.setUsername(data.username);
+                user.setEmail(data.email);
+                user.setId(data.id);
 
-        } catch (error) {
-            // Manejo de errores
-            // @ts-ignore
-            console.error('Error al obtener la información del usuario:', error.response.data);
+                navigateToUpload(token);
+                return data;
+            }
+        } catch (error: any) {
+            if (error.response) {
+                console.error('Error al obtener la información del usuario:', error.response.data);
+            } else {
+                console.error('Error al obtener la información del usuario:', error.message);
+            }
             throw new Error('No se pudo obtener la información del usuario');
         }
     }
 
     function navigateToUpload(token: string | null) {
-        navigate('/upload', {state: {token}});
+        navigate('/Dashboard', {state: {token}});
     }
 
     const handleClose = () => {
@@ -141,12 +156,9 @@ function LoginPage() {
                     onClose={handleClose}
                 />
             )}
-            <header>
-                <Link className="logo" to={"/"}>
-                    <img className="logoPng" src={logo} alt="Logo"/>
-                </Link>
-                <Link className={"buttonSignUp"} to="/register">Sign up</Link>
-            </header>
+
+            <Header />
+
             <div className={"centerDiv"}>
                 <main>
                     <section className="logoSect">

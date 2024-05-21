@@ -2,12 +2,13 @@
 
 import React from 'react';
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
-import LoginPage from './components/Login Page/LoginPage';
-import Landing from "./components/Landing Page/LandingPage";
-import SignUpPage from "./components/Sign Up Page/SignUpPage";
+import LoginPage from './Screens/Login Page/LoginPage';
+import Landing from "./Screens/Landing Page/LandingPage";
+import SignUpPage from "./Screens/Sign Up Page/SignUpPage";
 import './App.css';
-import Upload from "./components/Upload Page/Upload";
-import UploadNext from "./components/Upload Next Page/UploadNext";
+import Upload from "./Screens/UploadScreens/Upload1/Upload";
+import UploadNext from "./Screens/UploadScreens/Upload2/UploadNext";
+import Dashboard from "./Screens/DashboardPage/Dashboard";
 
 function App() {
     return (
@@ -18,6 +19,7 @@ function App() {
                 <Route path="*" element={<Landing />} />
                 <Route path="/Upload" element={<Upload />} />
                 <Route path={"/UploadNext"} element={<UploadNext/>} />
+                <Route path={"/Dashboard"} element={<Dashboard />} />
             </Routes>
         </Router>
     );

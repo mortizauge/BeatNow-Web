@@ -4,13 +4,6 @@ html {
     font-family: Arial, sans-serif;
 }
 
-header {
-    background-color: #0B0B0B;
-    display: flex;
-    justify-content: space-between;
-    padding: 20px;
-}
-
 .logoPng {
     width: 35%;
 

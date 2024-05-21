@@ -121,15 +121,6 @@ html {
     background-color: #111111;
 }
 
-.header {
-    background-color: #0B0B0B;
-    height: 60px;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    color: white;
-}
-
 .googleSignIn {
     border-radius: 15px;
     background-color: #FFFFFF;

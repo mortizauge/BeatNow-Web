@@ -2,13 +2,14 @@
 
 import React, { useRef, useState } from 'react';
 import { Link } from 'react-router-dom';
-import '../Landing Page/LandingPage.css';
-import logo from '../../assets/Logo.png';
-import rect from '../../assets/Rectangle 58.png';
+import '../../Landing Page/LandingPage.css';
+import logo from '../../../assets/Logo.png';
+import rect from '../../../assets/Rectangle 58.png';
 import './UploadNext.css';
 import Select from 'react-select'
-import GlobalSelect from "../Global Components/GlobalSelect";
-import CustomPopup from "../Popup/CustomPopup";
+import GlobalSelect from "../../../components/Global Components/GlobalSelect";
+import CustomPopup from "../../../components/Popup/CustomPopup";
+import Header from "../../../Layout/Header/Header";
 
 function UploadNext() {
     const [message, setMessage] = useState<string>("");
@@ -106,12 +107,7 @@ function UploadNext() {
                 message={message}
                 onClose={handleClose}
             />}
-            <header>
-                <Link className="logo" to={"/"}>
-                    <img className="logoPng" src={logo} alt="Logo"/>
-                </Link>
-                <Link className={"buttonSignUp"} to="/register">Sign up</Link>
-            </header>
+            <Header />
 
             <div className="centerDiv">
                 <main>

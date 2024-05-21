@@ -1,0 +1,106 @@
+.container1 {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    height: 100%; /* Ocupa toda la altura del contenedor padre */
+    padding: 10px; /* Añade algo de padding para que el contenido no esté pegado al borde */
+    box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1); /* Añade una sombra para darle un poco de estilo */
+    position: fixed; /* Fija el contenedor en el lado izquierdo */
+    left: 0; /* Alinea al left del viewport */
+    transition: width 0.3s ease; /* Agrega transición para el ancho */
+  }
+  
+  .button {
+    margin-bottom: 10px;
+    padding: 10px;
+    background-color: transparent;
+    border: none;
+    cursor: pointer;
+    width: 100%; /* Asegura que el botón ocupe todo el ancho */
+    font-size: 20px;
+    transition: transform 1s ease; /* Agrega transición para la rotación */
+    transition: all ease 1s;
+    color: #ffffff;
+  }
+  
+  .rotate {
+    transform: rotate(360deg); /* Gira el icono del botón */
+  }
+  
+  .menu {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    width: 100%; /* Asegura que el menú ocupe todo el ancho */
+  }
+  
+  .menu-item {
+    margin-top: 20px;
+    padding: 10px 0;
+    border-bottom: 1px solid #ccc;
+    opacity: 0; /* Inicialmente oculta los elementos */
+    transition: opacity 0.5s ease; /* Agrega transición para la entrada */
+    width: 100%; /* Asegura que los elementos ocupen todo el ancho */
+    transition: all 0.3s ease; /* Agrega transición para el hover */
+  }
+  
+  .menu-item:hover {
+    background-color: #6413BA;
+    padding: 10px 20px;
+    cursor: pointer;
+  }
+  
+  .menu-item i {
+    color: #ffffff;
+    text-decoration: none;
+    margin-right: 20px;
+  }
+  
+  .slide-in {
+    animation: slideIn 0.5s forwards; /* Aplica la animación de entrada */
+  }
+  
+  @keyframes slideIn {
+    from {
+      opacity: 0; /* Oculta los elementos al inicio de la animación */
+      transform: translateX(-50px); /* Desplaza los elementos hacia la izquierda */
+    }
+    to {
+      opacity: 1; /* Muestra los elementos al final de la animación */
+      transform: translateX(0); /* Detiene el desplazamiento */
+    }
+  }
+  
+  .container1.expanded {
+    width: 200px; /* Ancho cuando está expandido */
+  }
+  
+  .uploadBeat {
+    display: block;
+    margin-top: 150px;
+    padding: 10px 20px;
+    background-color: #6413BA;
+    color: white;
+    width: 100%;
+    text-align: center;
+    border-radius: 5px;
+    text-decoration: none;
+    opacity: 0; /* Inicialmente oculto */
+    transition: opacity 0.9s ease, transform 0.5s ease; /* Transiciones para la opacidad y el desplazamiento */
+  }
+
+    .uploadBeat:hover {
+        background-color: #4A0C7D;
+        color: #ffffff;
+    }
+  
+  .uploadBeat.slide-in {
+    opacity: 1; /* Muestra el botón */
+    transform: translateX(0); /* Detiene el desplazamiento */
+  }
+  
+  .uploadBeat.slide-out {
+    opacity: 0; /* Oculta el botón */
+    transform: translateX(-50px); /* Desplaza el botón hacia la izquierda */
+  }
+  

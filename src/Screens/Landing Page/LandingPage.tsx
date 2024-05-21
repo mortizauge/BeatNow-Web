@@ -5,17 +5,13 @@ import { Link } from 'react-router-dom';
 import './LandingPage.css';
 import logo from '../../assets/Logo.png';
 import studio from '../../assets/Studio 2.jpeg';
+import Header from "../../Layout/Header/Header";
 
 function Landing() {
     return (
         <div className="app">
-            <header>
-                <Link className="logo" to={"/"}>
-                    <img className="logoPng" src={logo} alt="Logo"/>
-                </Link>
-                <Link className="upload" to="/Upload">Upload</Link>
-                <Link className={"buttonSignUp"} to="/register">Sign up</Link>
-            </header>
+
+            <Header />
 
             <div className="centerDiv">
                 <main>
