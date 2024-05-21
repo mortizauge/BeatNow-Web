@@ -29,6 +29,7 @@ interface Beat {
 }
 
 function Upload() {
+    const maxBPM = 500;
     // Estados para los campos del formulario
     const [title, setTitle] = useState("");
     const [genre, setGenre] = useState("");
@@ -239,8 +240,8 @@ function Upload() {
     };
 
     const handleTagsChange = (tags: string[]) => {
-        // Prepend '#' to each tag
-        const updatedTags = tags.map(tag => tag.startsWith('#') ? tag : `#${tag}`);
+        // Prepend '#' to each tag and remove spaces
+        const updatedTags = tags.map(tag => tag.startsWith('#') ? tag.replace(/\s/g, '') : `#${tag.replace(/\s/g, '')}`);
         setTags(updatedTags);
     };
 
@@ -290,140 +291,140 @@ function Upload() {
         { value: 'metal', label: 'Metal' }
     ]
 
-    return (
+    return <div className="app">
+        {showPopup && <CustomPopup
+                message={message}
+                onClose={handleClose}
+            />}
+        <header>
+            <Link className="logo" to={"/"}>
+                <img className="logoPng" src={logo} alt="Logo"/>
+            </Link>
+            <Link to={"/uploadnext"}>uploadnext</Link>
 
-        <div className="app">
-            {showPopup && (
-                <CustomPopup
-                    message={message}
-                    onClose={handleClose}
-                />
-            )}
-            <header>
-                <Link className="logo" to={"/"}>
-                    <img className="logoPng" src={logo} alt="Logo"/>
-                </Link>
-                <Link to={"/uploadnext"}>uploadnext</Link>
+            <Link className={"userBtn"} to="/upload">{username}</Link>
+        </header>
 
-                <Link className={"userBtn"} to="/upload">{username}</Link>
-            </header>
+        <div className="centerDiv">
+            <main>
+                <section className="drop-beat dragging-parent">
+                    <div
+                        className={`image-container ${selectedFile ? 'file-selected' : ''} ${dragging ? 'dragging' : ''}`}
+                        onClick={onImageContainerClick}
+                        onDragOver={onDragOver}
+                        onDragEnter={onDragEnter}
+                        onDragLeave={onDragLeave}
+                        onDrop={onDrop}
+                    >
+                        <input
+                            type="file"
+                            id="fileInput"
+                            ref={fileInputRef}
+                            style={{display: 'none'}}
+                            accept=".wav,.mp3,.flac"
+                            onChange={onFileInputChange}
+                        />
+                        {selectedFile ? <>
+                                <h1 className="centered-text">{selectedFile.name}</h1>
+                                <h5 className="lower-centered-text">Click here to change the file</h5>
+                            </> : <>
+                                <h1 className="centered-text">Click or drag here to<br/>upload your <b>beat</b></h1>
+                                <h5 className="lower-centered-text">Supported formats:<br/>.wav, .mp3, .flac</h5>
+                            </>}
+                    </div>
+                </section>
 
-            <div className="centerDiv">
-                <main>
-                    <section className="drop-beat dragging-parent">
-                        <div
-                            className={`image-container ${selectedFile ? 'file-selected' : ''} ${dragging ? 'dragging' : ''}`}
-                            onClick={onImageContainerClick}
-                            onDragOver={onDragOver}
-                            onDragEnter={onDragEnter}
-                            onDragLeave={onDragLeave}
-                            onDrop={onDrop}
-                        >
-                            <input
-                                type="file"
-                                id="fileInput"
-                                ref={fileInputRef}
-                                style={{display: 'none'}}
-                                accept=".wav,.mp3,.flac"
-                                onChange={onFileInputChange}
-                            />
-                            {selectedFile ? (
-                                <>
-                                    <h1 className="centered-text">{selectedFile.name}</h1>
-                                    <h5 className="lower-centered-text">Click here to change the file</h5>
-                                </>
-                            ) : (
-                                <>
-                                    <h1 className="centered-text">Click or drag here to<br/>upload your <b>beat</b></h1>
-                                    <h5 className="lower-centered-text">Supported formats:<br/>.wav, .mp3, .flac</h5>
-                                </>
-                            )}
-                        </div>
-                    </section>
-
-                    <section className="beat-info">
-                        <form className="info-form">
-                            <input
-                                type="text"
-                                placeholder="Title"
-                                value={title}
-                                onChange={(e) => setTitle(e.target.value)}
-                            />
-                            <input
-                                type="number"
-                                max={300}
-                                min={1}
-                                placeholder="BPM"
-                                value={bpmValue}
-                                onChange={(e) => setBpmValue(e.target.value)}
-                            />
-                            <TagsInput
-                                value={tags}
-                                onChange={handleTagsChange}
-                                beforeAddValidate={beforeAddTagsInput}
-                                name="tags"
-                                placeHolder="#Tags"
-                            />
-                            <GlobalSelect
-                                options={moodsList}
-                                isSearchable={true}
-                                isMulti={true}
-                                placeholder="Mood"
-                                onChange={(selected) => setGenre(selected ? selected.value : "")}
-                            />
-                            <GlobalSelect
-                                options={genresList}
-                                isSearchable={true}
-                                isMulti={false}
-                                placeholder="Genres"
-                                onChange={(selected) => setGenre(selected ? selected.value : "")}
-                            />
-                            <GlobalSelect
-                                options={instrumentsList}
-                                isSearchable={true}
-                                isMulti={true}
-                                placeholder="Instruments"
-                                onChange={(selected) => setInstruments(selected ? selected.map((item: { value: any; }) => item.value) : [])}
-                            />
+                <section className="beat-info">
+                    <form className="info-form">
+                        <input
+                            type="text"
+                            placeholder="Title"
+                            value={title}
+                            onChange={(e) => setTitle(e.target.value)}
+                        />
+                        <input
+                            type="number"
+                            max={maxBPM}
+                            min={0}
+                            placeholder="Tempo"
+                            value={bpmValue}
+                            onChange={(e) => {
+                                if (e.target.value === '') {
+                                    setBpmValue('');
+                                } else {
+                                    const value = parseInt(e.target.value);
+                                    if (value >= 0 && value <= maxBPM) {
+                                        setBpmValue(value.toString());
+                                    }
+                                }
+                            }}
+                        />
+                        <TagsInput
+                            value={tags}
+                            onChange={handleTagsChange}
+                            beforeAddValidate={beforeAddTagsInput}
+                            name="tags"
+                            placeHolder="#Tags"
+                        />
+                        <GlobalSelect
+                            options={moodsList}
+                            isSearchable={true}
+                            isMulti={true}
+                            placeholder="Mood"
+                            onChange={(selected) => setGenre(selected ? selected.value : "")}
+                        />
+                        <GlobalSelect
+                            options={genresList}
+                            isSearchable={true}
+                            isMulti={false}
+                            placeholder="Genres"
+                            onChange={(selected) => setGenre(selected ? selected.value : "")}
+                        />
+                        <GlobalSelect
+                            options={instrumentsList}
+                            isSearchable={true}
+                            isMulti={true}
+                            placeholder="Instruments"
+                            onChange={(selected) => setInstruments(selected ? selected.map((item: { value: any; }) => item.value) : [])}
+                        />
 
 
-                        </form>
-                    </section>
-                    <section className="caption-and-button">
-                        <form className="next-form" onSubmit={handleSubmit}>
-                            <div className={"checkboxes"}>
-                                <div className={"termsCheckbox"}>
-                                    <input
-                                        className="checkbox"
-                                        type="checkbox"
-                                        id="terms"
-                                        checked={termsAccepted}
-                                        onChange={() => setTermsAccepted(!termsAccepted)}
-                                    />
-                                    <label className="termsTxt">I have read and accept the terms and conditions</label>
-                                </div>
-                                <div className={"copyrightCheckBox"}>
-                                    <input
-                                        className="checkbox"
-                                        type="checkbox"
-                                        id="copyright"
-                                        checked={noCopyrightInfringement}
-                                        onChange={() => setNoCopyrightInfringement(!noCopyrightInfringement)}
-                                    />
-                                    <label className="copyrightTxt">I confirm that I am not uploading copyrighted
-                                        content</label>
-                                </div>
-
+                    </form>
+                </section>
+                <section className="caption-and-button">
+                    <form className="next-form" onSubmit={handleSubmit}>
+                        <div className={"checkboxes"}>
+                            <div className={"termsCheckbox"}>
+                                <input
+                                    className="checkbox"
+                                    type="checkbox"
+                                    id="terms"
+                                    checked={termsAccepted}
+                                    onChange={() => setTermsAccepted(!termsAccepted)}
+                                />
+                                <label className="termsTxt">I have read and accept the terms and conditions</label>
                             </div>
-                            <button className={"next-btn"} type="submit">
-                                <img className={"next-btn-img"} src={rightarrow} alt="Next"/>
-                            </button>
-                        </form>
-                    </section>
-                </main>
-            </div>
+                            <div className={"copyrightCheckBox"}>
+                                <input
+                                    className="checkbox"
+                                    type="checkbox"
+                                    id="copyright"
+                                    checked={noCopyrightInfringement}
+                                    onChange={() => setNoCopyrightInfringement(!noCopyrightInfringement)}
+                                />
+                                <label className="copyrightTxt">I confirm that I am not uploading copyrighted
+                                    content</label>
+                            </div>
+
+                        </div>
+                        <button className={"next-btn"} type="submit">
+                            <img className={"next-btn-img"} src={rightarrow} alt="Next"/>
+                        </button>
+                    </form>
+                </section>
+            </main>
         </div>
-    );
+    </div>;
 }
 
 export default Upload;
