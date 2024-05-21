@@ -1,0 +1,93 @@
+html {
+    background-color: #111111;
+    color: #fff;
+    font-family: Arial, sans-serif;
+}
+
+header {
+    background-color: #0B0B0B;
+    display: flex;
+    justify-content: space-between;
+    padding: 20px;
+}
+
+.logoPng {
+    width: 35%;
+
+}
+
+.tryDiv {
+    margin: 50px 0 50px 0;
+
+}
+
+
+.app {
+    background-color: #111111;
+    color: #fff;
+}
+
+
+main {
+    display: flex;
+}
+
+
+.main {
+    display: flex;
+    justify-content: center;
+    padding: 5%;
+
+}
+
+
+.centerDiv {
+    display: flex;
+    margin: 3%;
+    background-color: #161616;
+    border-radius: 30px;
+}
+
+section {
+    justify-content: center;
+    width: 50%;
+}
+
+
+.studio-image {
+    display: flex;
+    margin: 2%;
+    max-height: 600px;
+    align-self: center;
+}
+
+.studio-image-PNG {
+    max-width: 100%;
+    height: auto;
+    border-radius: 30px;
+}
+
+.contentLanding {
+    padding: 5% 0;
+    margin-left: 10%;
+    text-align: center;
+    width: 50%;
+    max-width: 30%;
+}
+
+.contentLanding h1 {
+    font-size: 3em;
+}
+
+.contentLanding p {
+    font-size: 1.2em;
+}
+
+.LogIn {
+    color: #8731E4;
+    text-decoration: none;
+}
+
+
+
+
