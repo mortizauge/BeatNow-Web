@@ -3,11 +3,12 @@
     flex-direction: column;
     align-items: flex-start;
     height: 100%; /* Ocupa toda la altura del contenedor padre */
-    padding: 10px; /* Añade algo de padding para que el contenido no esté pegado al borde */
+    padding: 20px; /* Añade algo de padding para que el contenido no esté pegado al borde */
     box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1); /* Añade una sombra para darle un poco de estilo */
     position: fixed; /* Fija el contenedor en el lado izquierdo */
     left: 0; /* Alinea al left del viewport */
     transition: width 0.3s ease; /* Agrega transición para el ancho */
+    background-color: #0B0B0B;
   }
   
   .button {

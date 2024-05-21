@@ -11,9 +11,7 @@ import LeftSlide from "../../Layout/LeftSlide/LeftSlide";
 function Dashboard() {
     return (
         <div className="app">
-            <header>
-                <Header />
-            </header>
+            <Header />
             <div className="leftSlide" style={{display: "flex"}}>
                 <LeftSlide />
 
