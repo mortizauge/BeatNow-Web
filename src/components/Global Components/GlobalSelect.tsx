@@ -99,14 +99,14 @@ const GlobalSelect: React.FC<GlobalSelectProps> = ({
                     menu: (provided) => ({
                         ...provided,
                         borderRadius: '15px',
-                        maxHeight: '175px',
+                        maxHeight: '225px',
                         boxShadow: '0 5px 20px -2px #111',
                     }),
                     menuList: (base) => ({
                         ...base,
                         margin: '8px 10px 8px 8px',
                         borderRadius: '15px',
-                        maxHeight: '155px',
+                        maxHeight: '205px',
                         '::-webkit-scrollbar': {
                             width: '10px',
                             height: '0px',
