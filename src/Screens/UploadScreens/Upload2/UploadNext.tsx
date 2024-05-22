@@ -12,96 +12,10 @@ import CustomPopup from "../../../components/Popup/CustomPopup";
 import Header from "../../../Layout/Header/Header";
 
 function UploadNext() {
-    const [message, setMessage] = useState<string>("");
-    const instruments = [
-        { value: 'guitar', label: 'Guitar' },
-        { value: 'bass', label: 'Bass' },
-        { value: 'flute', label: 'Flute' },
-        { value: 'drums', label: 'Drums' },
-        { value: 'piano', label: 'Piano' },
-        { value: 'synth', label: 'Synth' },
-        { value: 'vocals', label: 'Vocals' },
-        { value: 'strings', label: 'Strings' },
-        { value: 'brass', label: 'Brass' },
-        { value: 'harp', label: 'Harp'}
-    ]
-    const tags = [
-        { label: '#KanyeTypeBeat', value: 'KanyeTypeBeat' },
-        { label: '#UKdrill', value: 'UKdrill' },
-        { label: '#2024BeatNowFest', value: '2024BeatNowFest' },
-        { label: '#90sHipHop', value: '90sHipHop' }
-    ]
-    const [showPopup, setShowPopup] = useState(false);
 
-    const [selectedFile, setSelectedFile] = useState<File | null>(null);
-    const [dragging, setDragging] = useState(false);
-    const fileInputRef = useRef<HTMLInputElement>(null);
-
-    const onImageContainerClick = () => {
-        fileInputRef.current?.click();
-    };
-
-    const removeImage = (event: React.MouseEvent) => {
-        event.stopPropagation();
-        setSelectedFile(null);
-    };
-
-
-
-    const onDragOver = (event: React.DragEvent<HTMLDivElement>) => {
-        event.preventDefault();
-        setDragging(true);
-    };
-
-    const onDragEnter = (event: React.DragEvent<HTMLDivElement>) => {
-        event.preventDefault();
-        setDragging(true);
-    };
-
-    const onDragLeave = (event: React.DragEvent<HTMLDivElement>) => {
-        event.preventDefault();
-        setDragging(false);
-    };
-
-    const onDrop = (event: React.DragEvent<HTMLDivElement>) => {
-        event.preventDefault();
-        setDragging(false);
-        const file = event.dataTransfer.files ? event.dataTransfer.files[0] : null;
-        setSelectedFile(file);
-    };
-
-    const onFileInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-        const file = event.target.files ? event.target.files[0] : null;
-        if (file) {
-            const fileType = file.type;
-            const validImageTypes = ['image/gif', 'image/jpeg', 'image/png'];
-            if (validImageTypes.includes(fileType)) {
-                setSelectedFile(file);
-            } else {
-                setMessage("This file format is not supported.");
-                setShowPopup(true);
-            }
-        }
-    };
-
-
-    console.log(localStorage.getItem("beat"));
-
-    const handleSumbit = (event: React.FormEvent) => {
-        event.preventDefault();
-        if (selectedFile === null) {
-            setMessage("Please upload a cover image.");
-            setShowPopup(true);
-        } else {
-            // Handle the submit action here
-        }
-    };
-
-    const handleClose = () => {
-        setShowPopup(false);
-    };
 
     return (
+        {/*
         <div className="app">
             {showPopup && <CustomPopup
                 message={message}
@@ -117,14 +31,14 @@ function UploadNext() {
                             />
                     </section>
                     <section className="next-drop-pic dragging-parent">
-                        <form className={"next-form"} onSubmit={handleSumbit}>
+                        <form className={"next-form"} onSubmit={handleSumbit2}>
                             <div
                                 className={`next-image-container ${selectedFile ? 'file-selected' : ''} ${dragging ? 'dragging' : ''}`}
                                 onClick={onImageContainerClick}
                                 onDragOver={onDragOver}
                                 onDragEnter={onDragEnter}
                                 onDragLeave={onDragLeave}
-                                onDrop={onDrop}
+                                onDrop={onDrop2}
                             >
                                 <input
                                     type="file"
@@ -132,7 +46,7 @@ function UploadNext() {
                                     ref={fileInputRef}
                                     style={{display: 'none'}}
                                     accept="image/*"
-                                    onChange={onFileInputChange}
+                                    onChange={onFileInputChange2}
                                 />
                                 {selectedFile ? (
                                     <>
@@ -157,6 +71,7 @@ function UploadNext() {
                 </main>
             </div>
         </div>
+        */}
     );
 }
 
