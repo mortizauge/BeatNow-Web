@@ -9,6 +9,7 @@ import Upload from "../Upload Page/Upload";
 import {useNavigate} from 'react-router-dom';
 import axios, {AxiosResponse} from 'axios';
 import CustomPopup from "../Popup/CustomPopup";
+import {signInOrRegisterWithGoogle} from "../Global Components/firebaseConfig";
 
 
 function LoginPage() {
@@ -175,7 +176,7 @@ function LoginPage() {
                             <button className={"submitButton"} type={"submit"}> Sign in</button>
                             <div className={"dividerHori"}></div>
                             <div className={"socials"}>
-                                <Link className={"googleSignIn"} to={"/google"}>
+                                <Link className={"googleSignIn"} to={"/login"} onClick={signInOrRegisterWithGoogle}>
                                     <img className={"googleLogo"}
                                          src="https://img.icons8.com/color/48/000000/google-logo.png"
                                          alt="Google"/>

@@ -4,6 +4,7 @@ import { Link } from 'react-router-dom';
 import axios from 'axios';
 import logo from "../../assets/Logo.png";
 import logo2 from "../../assets/Frame 2.png";
+import {signInOrRegisterWithGoogle} from "../Global Components/firebaseConfig";
 
 function SignUpPage() {
     const [full_name, setFullName] = useState('');
@@ -113,7 +114,7 @@ function SignUpPage() {
 
                             <div className={"dividerHori2"}></div>
                             <div className={"socials"}>
-                                <Link className={"googleSignUp"} to={"/google"}>
+                                <Link className={"googleSignUp"} to={"/register"} onClick={signInOrRegisterWithGoogle}>
                                     <img className={"googleLogo"}
                                          src="https://img.icons8.com/color/48/000000/google-logo.png"
                                          alt="Google"/>
