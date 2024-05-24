@@ -1,15 +1,11 @@
 import React from 'react';
 import logo from '../../assets/Logo.png';
+import Header from "../../Layout/Header/Header";
 
 function SignUpPage() {
     return (
         <div className="app">
-            <header>
-                <div className="logo">
-                    <img className="logoPng" src={logo} alt="Logo"/>
-                </div>
-                <a className={"buttonSignUp"}>Sign up</a>
-            </header>
+            < Header />
 
             <div className="centerDiv">
                 <main>

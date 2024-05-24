@@ -8,12 +8,13 @@
     display: flex;
     justify-content: center;
     align-items: center;
-    z-index: 1000;
+    z-index: 1002;
 
 }
 
 
 .custom-popup-content {
+    color: white;
     position: relative; /* Agregar esta línea para permitir el posicionamiento absoluto de los elementos hijos */
     background-color: #111111;
     padding: 30px;

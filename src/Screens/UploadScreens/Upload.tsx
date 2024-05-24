@@ -5,13 +5,15 @@ import { Link, useNavigate } from 'react-router-dom';
 import '../Landing Page/LandingPage.css';
 import rightarrow from '../../assets/siguiente-pista.png';
 import './Upload.css';
-import GlobalSelect from "../../components/Global Components/GlobalSelect";
+import GlobalSelect from "../../components/Select/GlobalSelect";
 import axios, {AxiosResponse} from "axios";
 import CustomPopup from '../../components/Popup/CustomPopup';
 import { TagsInput } from "react-tag-input-component";
 import Header from "../../Layout/Header/Header";
-
+import { useTransition, animated } from 'react-spring';
 import Select from 'react-select'
+import Loading from "../../components/Loading/Loading";
+import {useSpring} from "@react-spring/web";
 
 interface Beat {
     beatUsername: string;
@@ -27,6 +29,8 @@ interface Beat {
 }
 
 function Upload() {
+    const [activeTab, setActiveTab] = useState(0);
+    const [isLoading, setIsLoading] = useState(false);
     const maxBPM = 500;
     // Estados para los campos del formulario
     const [title, setTitle] = useState("");
@@ -38,6 +42,7 @@ function Upload() {
     const [username, setUsername] = useState("");
     const [selectedMusicFile, setSelectedMusicFile] = useState<File | null>(null);
     const [showPopup, setShowPopup] = useState(false);
+    const [showLoading, setShowLoading] = useState(false);
     const [tokenExists, setTokenExists] = useState<boolean>(true);
     const [bpm, setBpm] = useState<number | null>(null);
     const [termsAccepted, setTermsAccepted] = useState(false);
@@ -46,6 +51,7 @@ function Upload() {
     const [submitted, setSubmitted] = useState(false);
     const [file, setFile] = useState<File | null>(null);
     const [message, setMessage] = useState<string>("");
+    const [loadingMessage, setLoadingMessage] = useState<string>("");
     const [selected, setSelected] = useState([]);
     const [selectedImgFile, setSelectedImgFile] = useState<File | null>(null);
     const [description, setDescription] = useState("");
@@ -63,22 +69,26 @@ function Upload() {
         beatDescription: "",
         beatPic: null
     });
-
     const [next, setNext] = useState(false);
 
+    const transitions = useTransition(next, {
+        from: { transform: 'translate3d(100%,0,0)' },
+        enter: { transform: 'translate3d(0%,0,0)' },
+        leave: { transform: 'translate3d(-50%,0,0)' },
+    });
+
+
+    const spring = useSpring({
+        to: {
+            transform: `translateX(${activeTab * 100}%)`,
+        },
+    });
 
 
     const navigate = useNavigate();
 
     useEffect(() => {
         const token = localStorage.getItem("token");
-
-        if (!token || !tokenExists) {
-            setTokenExists(false);
-            setMessage("Session has expired, redirecting to login page");
-            setShowPopup(true);
-            return;
-        }
 
         const url = "http://217.182.70.161:6969/v1/api/users/users/me";
         const headers = {
@@ -168,12 +178,15 @@ function Upload() {
         }
     };
 
-    const handleSumbit2 = (event: React.FormEvent) => {
+    const handleSubmit2 = async (event: React.FormEvent) => {
         event.preventDefault();
         if (selectedImgFile === null) {
             setMessage("Please upload a cover image.");
             setShowPopup(true);
         } else {
+            setIsLoading(true);
+            setLoadingMessage("Uploading beat...");
+            setShowLoading(true);
             setBeat({
                 beatUsername: username,
                 beatFile: selectedMusicFile,
@@ -186,11 +199,14 @@ function Upload() {
                 beatDescription: description,
                 beatPic: selectedImgFile
             });
-            uploadBeat();
+            await new Promise(resolve => setTimeout(resolve, 2000));
+            await uploadBeat();
         }
     };
 
     async function uploadBeat() {
+        setIsLoading(true); // Añade esta línea
+
         const url = "http://217.182.70.161:6969/v1/api/posts/upload";
         const headers = {
             accept: "application/json",
@@ -198,8 +214,8 @@ function Upload() {
         };
 
         const formData = new FormData();
-        formData.append('cover_file', beat.beatPic as Blob); // Asegúrate de que 'beat.beatPic' contiene el archivo de la imagen de portada
-        formData.append('audio_file', beat.beatFile as Blob); // Asegúrate de que 'beat.beatFile' contiene el archivo de audio
+        formData.append('cover_file', beat.beatPic as Blob);
+        formData.append('audio_file', beat.beatFile as Blob);
         formData.append('description', beat.beatDescription);
         formData.append('genre', beat.beatGenre);
         formData.append('tags', JSON.stringify(beat.beatTags));
@@ -215,17 +231,13 @@ function Upload() {
                 setMessage("Beat uploaded successfully");
                 setShowPopup(true);
                 setSuccessfulUpload(true);
-                // Handle success here
-            }
-            else {
-
             }
         } catch (error) {
             console.error('Error uploading beat:', error);
-            // Handle error here
+        } finally {
+            setIsLoading(false); // Añade esta línea
         }
     }
-
     const handleClose = () => {
         const token = localStorage.getItem("token");
         if (!token || !tokenExists) {
@@ -292,6 +304,10 @@ function Upload() {
             const validImageTypes = ['image/gif', 'image/jpeg', 'image/png'];
             if (validImageTypes.includes(fileType)) {
                 setSelectedImgFile(file);
+                setBeat({
+                    ...beat,
+                    beatPic: file
+                });
             } else {
                 setMessage("This file format is not supported.");
                 setShowPopup(true);
@@ -388,189 +404,205 @@ function Upload() {
     ]
 
 
+    function handleDescChange() {
+        const description = (document.getElementById("description") as HTMLInputElement).value;
+        setDescription(description);
+        setBeat({
+            ...beat,
+            beatDescription: description
+        });
+    }
+
     return (
         <div className="app">
-        {showPopup && <CustomPopup
+            {showPopup && <CustomPopup
                 message={message}
                 onClose={handleClose}
             />}
 
-        <Header />
+            {isLoading && <Loading message={loadingMessage} />}
+            <Header />
 
-        <div className="centerDiv">
-            <main>
-                {!next ? (
-                    <>
-                        <section className="drop-beat dragging-parent">
-                            <div
-                                className={`image-container ${selectedMusicFile ? 'file-selected' : ''} ${dragging ? 'dragging' : ''}`}
-                                onClick={onImageContainerClick}
-                                onDragOver={onDragOver}
-                                onDragEnter={onDragEnter}
-                                onDragLeave={onDragLeave}
-                                onDrop={onDrop1}
-                            >
-                                <input
-                                    type="file"
-                                    id="fileInput"
-                                    ref={fileInputRef}
-                                    style={{display: 'none'}}
-                                    accept=".wav,.mp3,.flac"
-                                    onChange={onFileInputChange1}
-                                />
-                                {selectedMusicFile ? <>
-                                    <h1 className="centered-text">{selectedMusicFile.name}</h1>
-                                    <h5 className="lower-centered-text">Click here to change the file</h5>
-                                </> : <>
-                                    <h1 className="centered-text">Click or drag here to<br/>upload your <b>beat</b></h1>
-                                    <h5 className="lower-centered-text">Supported formats:<br/>.wav, .mp3, .flac</h5>
-                                </>}
-                            </div>
-                        </section>
-
-                        <section className="beat-info">
-                            <form className="info-form">
-                                <input
-                                    type="text"
-                                    placeholder="Title"
-                                    value={title}
-                                    onChange={(e) => setTitle(e.target.value)}
-                                />
-                                <input
-                                    type="number"
-                                    max={maxBPM}
-                                    min={0}
-                                    placeholder="Tempo"
-                                    value={bpmValue}
-                                    onChange={(e) => {
-                                        if (e.target.value === '') {
-                                            setBpmValue('');
-                                        } else {
-                                            const value = parseInt(e.target.value);
-                                            if (value >= 0 && value <= maxBPM) {
-                                                setBpmValue(value.toString());
-                                            }
-                                        }
-                                    }}
-                                />
-                                <TagsInput
-                                    value={tags}
-                                    onChange={handleTagsChange}
-                                    beforeAddValidate={beforeAddTagsInput}
-                                    name="tags"
-                                    placeHolder="#Tags"
-                                />
-                                <GlobalSelect
-                                    options={moodsList}
-                                    isSearchable={true}
-                                    isMulti={true}
-                                    placeholder="Mood"
-                                    onChange={(selected) => setMoods(selected ? selected.value : "")}
-                                />
-                                <GlobalSelect
-                                    options={genresList}
-                                    isSearchable={true}
-                                    isMulti={false}
-                                    placeholder="Genres"
-                                    onChange={(selected) => setGenre(selected ? selected.value : "")}
-                                />
-                                <GlobalSelect
-                                    options={instrumentsList}
-                                    isSearchable={true}
-                                    isMulti={true}
-                                    placeholder="Instruments"
-                                    onChange={(selected) => setInstruments(selected ? selected.map((item: {
-                                        value: any;
-                                    }) => item.value) : [])}
-                                />
-
-
-                            </form>
-                        </section>
-                        <section className="caption-and-button">
-                            <form className="next-form" onSubmit={handleSubmit1}>
-                                <div className={"checkboxes"}>
-                                    <div className={"termsCheckbox"}>
-                                        <input
-                                            className="checkbox"
-                                            type="checkbox"
-                                            id="terms"
-                                            checked={termsAccepted}
-                                            onChange={() => setTermsAccepted(!termsAccepted)}
-                                        />
-                                        <label className="termsTxt">I have read and accept the terms and
-                                            conditions</label>
-                                    </div>
-                                    <div className={"copyrightCheckBox"}>
-                                        <input
-                                            className="checkbox"
-                                            type="checkbox"
-                                            id="copyright"
-                                            checked={noCopyrightInfringement}
-                                            onChange={() => setNoCopyrightInfringement(!noCopyrightInfringement)}
-                                        />
-                                        <label className="copyrightTxt">I confirm that I am not uploading copyrighted
-                                            content</label>
-                                    </div>
-
-                                </div>
-                                <button className={"next-btn"} type="submit">
-                                    <img className={"next-btn-img"} src={rightarrow} alt="Next"/>
-                                </button>
-                            </form>
-                        </section>
-                    </>
-                ) : (
-                    <>
-                        <section className="next-caption-and-button">
-                            <textarea className={"next-caption"} spellCheck={false}
-                                      placeholder="Add a caption or a description for this beat..."
-                                      onChange={(e) => setDescription(e.target.value)}
-                            />
-                        </section>
-                        <section className="next-drop-pic dragging-parent">
-                            <form className={"next-form"} onSubmit={handleSumbit2}>
+            <div className="centerDiv">
+                <main>
+                    {!next ? (
+                        <>
+                            <section className="drop-beat dragging-parent">
                                 <div
-                                    className={`next-image-container ${selectedImgFile ? 'file-selected' : ''} ${dragging ? 'dragging' : ''}`}
+                                    className={`image-container ${selectedMusicFile ? 'file-selected' : ''} ${dragging ? 'dragging' : ''}`}
                                     onClick={onImageContainerClick}
                                     onDragOver={onDragOver}
                                     onDragEnter={onDragEnter}
                                     onDragLeave={onDragLeave}
-                                    onDrop={onDrop2}
+                                    onDrop={onDrop1}
                                 >
                                     <input
                                         type="file"
                                         id="fileInput"
                                         ref={fileInputRef}
                                         style={{display: 'none'}}
-                                        accept="image/*"
-                                        onChange={onFileInputChange2}
+                                        accept=".wav,.mp3,.flac"
+                                        onChange={onFileInputChange1}
                                     />
-                                    {selectedImgFile ? (
-                                        <>
-                                            <img src={URL.createObjectURL(selectedImgFile)} alt="Selected"
-                                                 className="selected-image"/>
-                                            <button onClick={removeImage} className="remove-image-button">×</button>
-                                            <h5 className={`lower-centered-text ${selectedImgFile ? 'lower-centered-text-shadow' : ''}`}>Click
-                                                here to change the file</h5>
-                                        </>
-                                    ) : (
-                                        <>
-                                            <h1 className="centered-text">Upload your cover art here</h1>
-                                            <h5 className="lower-centered-text">Supported formats: .jpg, .png, .gif,
-                                                etc.
-                                            </h5>
-                                        </>
-                                    )}
+                                    {selectedMusicFile ? <>
+                                        <h1 className="centered-text">{selectedMusicFile.name}</h1>
+                                        <h5 className="lower-centered-text">Click here to change the file</h5>
+                                    </> : <>
+                                        <h1 className="centered-text">Click or drag here to<br/>upload your <b>beat</b></h1>
+                                        <h5 className="lower-centered-text">Supported formats:<br/>.wav, .mp3, .flac</h5>
+                                    </>}
                                 </div>
-                                <button className={"upload-btn"} type={"submit"}><b>Upload Beat</b></button>
-                            </form>
-                        </section>
-                    </>
-                )}
+                            </section>
 
-            </main>
-        </div>
+                            <section className="beat-info">
+                                <form className="info-form">
+                                    <input
+                                        type="text"
+                                        placeholder="Title"
+                                        value={title}
+                                        onChange={(e) => setTitle(e.target.value)}
+                                    />
+                                    <input
+                                        type="number"
+                                        max={maxBPM}
+                                        min={0}
+                                        placeholder="Tempo"
+                                        value={bpmValue}
+                                        onChange={(e) => {
+                                            if (e.target.value === '') {
+                                                setBpmValue('');
+                                            } else {
+                                                const value = parseInt(e.target.value);
+                                                if (value >= 0 && value <= maxBPM) {
+                                                    setBpmValue(value.toString());
+                                                }
+                                            }
+                                        }}
+                                    />
+                                    <TagsInput
+                                        value={tags}
+                                        onChange={handleTagsChange}
+                                        beforeAddValidate={beforeAddTagsInput}
+                                        name="tags"
+                                        placeHolder="#Tags"
+                                    />
+                                    <GlobalSelect
+                                        options={moodsList}
+                                        isSearchable={true}
+                                        isMulti={true}
+                                        placeholder="Mood"
+                                        onChange={(selected) => setMoods(selected ? selected.value : "")}
+                                    />
+                                    <GlobalSelect
+                                        options={genresList}
+                                        isSearchable={true}
+                                        isMulti={false}
+                                        placeholder="Genres"
+                                        onChange={(selected) => setGenre(selected ? selected.value : "")}
+                                    />
+                                    <GlobalSelect
+                                        options={instrumentsList}
+                                        isSearchable={true}
+                                        isMulti={true}
+                                        placeholder="Instruments"
+                                        onChange={(selected) => setInstruments(selected ? selected.map((item: {
+                                            value: any;
+                                        }) => item.value) : [])}
+                                    />
+
+
+                                </form>
+                            </section>
+                            <section className="caption-and-button">
+                                <form className="next-form" onSubmit={handleSubmit1}>
+                                    <div className={"checkboxes"}>
+                                        <div className={"termsCheckbox"}>
+                                            <input
+                                                className="checkbox"
+                                                type="checkbox"
+                                                id="terms"
+                                                checked={termsAccepted}
+                                                onChange={() => setTermsAccepted(!termsAccepted)}
+                                            />
+                                            <label className="termsTxt">I have read and accept the terms and
+                                                conditions</label>
+                                        </div>
+                                        <div className={"copyrightCheckBox"}>
+                                            <input
+                                                className="checkbox"
+                                                type="checkbox"
+                                                id="copyright"
+                                                checked={noCopyrightInfringement}
+                                                onChange={() => setNoCopyrightInfringement(!noCopyrightInfringement)}
+                                            />
+                                            <label className="copyrightTxt">I confirm that I am not uploading copyrighted
+                                                content</label>
+                                        </div>
+
+                                    </div>
+                                    <button className={"next-btn"} type="submit">
+                                        <img className={"next-btn-img"} src={rightarrow} alt="Next"/>
+                                    </button>
+                                </form>
+                            </section>
+                        </>
+                    ) : (
+                        <>
+                            <section className="next-caption-and-button">
+                            <textarea className={"next-caption"} spellCheck={false}
+                                      placeholder="Add a caption or a description for this beat..."
+                                      onChange={(e) => setDescription(e.target.value)}
+                            />
+                            </section>
+                            <section className="next-drop-pic dragging-parent">
+                                <form className={"next-form"} onSubmit={handleSubmit2}>
+                                    <div
+                                        className={`next-image-container ${selectedImgFile ? 'file-selected' : ''} ${dragging ? 'dragging' : ''}`}
+                                        onClick={onImageContainerClick}
+                                        onDragOver={onDragOver}
+                                        onDragEnter={onDragEnter}
+                                        onDragLeave={onDragLeave}
+                                        onDrop={onDrop2}
+                                    >
+                                        <input
+                                            type="file"
+                                            id="fileInput"
+                                            ref={fileInputRef}
+                                            style={{display: 'none'}}
+                                            accept="image/*"
+                                            onChange={onFileInputChange2}
+                                        />
+                                        {selectedImgFile ? (
+                                            <>
+                                                <img src={URL.createObjectURL(selectedImgFile)} alt="Selected"
+                                                     className="selected-image"/>
+                                                <button onClick={removeImage} className="remove-image-button">×</button>
+                                                <h5 className={`lower-centered-text ${selectedImgFile ? 'lower-centered-text-shadow' : ''}`}>Click
+                                                    here to change the file</h5>
+                                            </>
+                                        ) : (
+                                            <>
+                                                <h1 className="centered-text">Upload your cover art here</h1>
+                                                <h5 className="lower-centered-text">Supported formats: .jpg, .png, .gif,
+                                                    etc.
+                                                </h5>
+                                            </>
+                                        )}
+                                    </div>
+                                    <button className={"upload-btn"} type={"submit"}><b>Upload Beat</b></button>
+                                </form>
+                            </section>
+                        </>
+                    )}
+
+                </main>
+            </div>
+            <div className={"tabs"}>
+                <animated.div style={spring} className={`tab-indicator ${next ? 'inactive' : 'active'}`}
+                              onClick={() => setNext(false)}/>
+                <animated.div style={spring} className={`tab-indicator ${next ? 'active' : 'inactive'}`}
+                              onClick={() => setNext(true)}/>
+            </div>
         </div>
 
     );

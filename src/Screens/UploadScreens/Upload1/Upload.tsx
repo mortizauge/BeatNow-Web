@@ -10,7 +10,7 @@ import rightarrow from '../../../assets/siguiente-pista.png';
 import rect from '../../../assets/Rectangle 58.png';
 import './Upload.css';
 import Select from 'react-select'
-import GlobalSelect from "../../../components/Global Components/GlobalSelect";
+import GlobalSelect from "../../../components/Select/GlobalSelect";
 import axios, {AxiosResponse} from "axios";
 import CustomPopup from '../../../components/Popup/CustomPopup';
 import {Simulate} from "react-dom/test-utils";

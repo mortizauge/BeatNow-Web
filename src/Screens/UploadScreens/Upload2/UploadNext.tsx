@@ -7,7 +7,7 @@ import logo from '../../../assets/Logo.png';
 import rect from '../../../assets/Rectangle 58.png';
 import './UploadNext.css';
 import Select from 'react-select'
-import GlobalSelect from "../../../components/Global Components/GlobalSelect";
+import GlobalSelect from "../../../components/Select/GlobalSelect";
 import CustomPopup from "../../../components/Popup/CustomPopup";
 import Header from "../../../Layout/Header/Header";
 

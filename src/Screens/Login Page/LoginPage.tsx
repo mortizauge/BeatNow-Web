@@ -131,6 +131,8 @@ function LoginPage() {
             }
         } catch (error: any) {
             if (error.response) {
+                setMessage("Error: " + error.response.detail.toString());
+                setShowPopup(true);
                 console.error('Error al obtener la información del usuario:', error.response.data);
             } else {
                 console.error('Error al obtener la información del usuario:', error.message);

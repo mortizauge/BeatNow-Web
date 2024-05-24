@@ -96,9 +96,10 @@ section {
     border-radius: 10px;
     cursor: pointer;
     text-decoration: none;
+    transition: background-color 0.3s;
 }
 .submitButton:hover {
-    color: #fff;
+    background-color: #8731E4 !important;
 }
 
 .forgotPwd {
