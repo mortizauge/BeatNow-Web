@@ -9,7 +9,12 @@
     justify-content: center;
     align-items: center;
     z-index: 1002;
+    opacity: 0; /* Inicialmente transparente */
+    transition: opacity 0.15s ease; /* Transición de opacidad */
+}
 
+.custom-popup.visible {
+    opacity: 1; /* Visible cuando se agrega la clase .visible */
 }
 
 

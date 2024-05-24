@@ -39,7 +39,6 @@ header {
     margin: 3%;
     background-color: #161616;
     justify-content: center;
-    flex-direction: column;
     border-radius: 30px;
 }
 

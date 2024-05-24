@@ -24,7 +24,7 @@ label {
     margin-bottom: 20px;
 }
 
-.centerDiv {
+.centerDiv-Login {
     display: flex;
     margin: 3%;
     background-color: #161616;
@@ -128,7 +128,7 @@ html {
     object-fit: contain;
     margin-right: 2%;
     width: 100%;
-
+    border: none;
 }
 
 .twitterSignIn {
@@ -137,6 +137,7 @@ html {
     object-fit: contain;
     margin-left: 2%;
     width: 100%;
+    border: none;
 }
 
 .socials {

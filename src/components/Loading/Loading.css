@@ -10,10 +10,14 @@
     display: flex;
     justify-content: center;
     align-items: center;
-    z-index: 1002; /* Asegúrate de que este valor sea mayor que el de cualquier otro elemento en tu página */
-    text-align: center;
+    z-index: 1002;
+    opacity: 0; /* Inicialmente transparente */
+    transition: opacity 0.5s ease; /* Transición de opacidad */
 }
 
+.loading-popup.visible {
+    opacity: 1; /* Visible cuando se agrega la clase .visible */
+}
 .loading-popup-container {
     color: white;
     position: relative; /* Agregar esta línea para permitir el posicionamiento absoluto de los elementos hijos */

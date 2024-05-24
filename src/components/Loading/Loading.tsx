@@ -1,6 +1,6 @@
-// src/components/Loading/LoadingPopup.tsx
+// src/components/Loading/Loading.tsx
 
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import './Loading.css';
 
 interface LoadingPopupProps {
@@ -8,8 +8,18 @@ interface LoadingPopupProps {
 }
 
 const LoadingPopup: React.FC<LoadingPopupProps> = ({message}) => {
+    const [isVisible, setIsVisible] = useState(false);
+
+    useEffect(() => {
+        setIsVisible(true);
+    }, []);
+
+    const handleClose = () => {
+        setIsVisible(false);
+    };
+
     return (
-        <div className="loading-popup">
+        <div className={`loading-popup ${isVisible ? 'visible' : ''}`}>
             <div className="loading-popup-container">
                 <div className="loading-popup-content">
                     <h2>{message}</h2>

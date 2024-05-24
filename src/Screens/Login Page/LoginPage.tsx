@@ -10,6 +10,7 @@ import axios, {AxiosResponse} from 'axios';
 import CustomPopup from "../../components/Popup/CustomPopup";
 import UserSingleton from "../../Model/UserSingleton";
 import Header from "../../Layout/Header/Header";
+import {signInOrRegisterWithGoogle} from "../../Model/firebaseConfig";
 
 
 function LoginPage() {
@@ -34,10 +35,7 @@ function LoginPage() {
         setPassword(event.target.value);
     };
 
-    const handleSubmit = async (event: React.FormEvent) => {
-        event.preventDefault();
-        const usr = username;
-        const pwd = password;
+    const handleSubmitWithParams = async (usr: string, pwd: string) => {
 
         try {
             const formData = new URLSearchParams();
@@ -76,6 +74,12 @@ function LoginPage() {
             setShowPopup(true);
         }
     };
+
+    const handleSubmit = async (event: React.FormEvent) => {
+        event.preventDefault();
+        await handleSubmitWithParams(username, password);
+    };
+
 
     async function token(usr: string, password: string) {
         try {
@@ -150,6 +154,11 @@ function LoginPage() {
     };
 
 
+    function notAvailable() {
+        setMessage('This feature is not available yet.');
+        setShowPopup(true);
+    }
+
     return (
         <div className={"app"}>
             {showPopup && (
@@ -161,7 +170,7 @@ function LoginPage() {
 
             <Header />
 
-            <div className={"centerDiv"}>
+            <div className={"centerDiv-Login"}>
                 <main>
                     <section className="logoSect">
                         <img className="logoPngCenter" src={logo2} alt="Logo"/>
@@ -189,16 +198,16 @@ function LoginPage() {
                             <button className={"submitButton"} type={"submit"}> Sign in</button>
                             <div className={"dividerHori"}></div>
                             <div className={"socials"}>
-                                <Link className={"googleSignIn"} to={"/google"}>
+                                <button className={"googleSignIn"} onClick={signInOrRegisterWithGoogle} type={"button"}>
                                     <img className={"googleLogo"}
                                          src="https://img.icons8.com/color/48/000000/google-logo.png"
                                          alt="Google"/>
-                                </Link>
-                                <Link className={"twitterSignIn"} to={"/x"}>
+                                </button>
+                                <button className={"twitterSignIn"} onClick={notAvailable} type={"button"}>
                                     <img className={"twitterLogo"}
                                          src="https://upload.wikimedia.org/wikipedia/commons/5/57/X_logo_2023_%28white%29.png"
                                          alt="Twitter"/>
-                                </Link>
+                                </button>
                             </div>
                             <div className={"signUpText"}>
                                 <h6>Don't have an account? <br/> <Link className={"signUp"} to={"/register"}>Sign
