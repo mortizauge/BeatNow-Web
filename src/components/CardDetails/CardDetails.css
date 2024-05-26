@@ -1,3 +1,22 @@
+.audio-player {
+    height: 0;
+    visibility: visible !important;
+    justify-content: center;
+    display: flex;
+    transition: opacity 1s; /* Asegúrate de que la transición esté aquí */
+}
+
+.audio-player.visible {
+    opacity: 1;
+    transition: opacity .7s; /* Transición al aparecer */
+}
+
+.audio-player.hidden {
+    opacity: 0;
+    transition: opacity 1.2s; /* Transición al desaparecer */
+}
+
+
 .card-details-popup {
     position: fixed;
     top: 0;
@@ -11,16 +30,11 @@
     z-index: 1002;
 }
 
-.audio-player {
-    height: 0;
-    justify-content: center;
-    display: flex;
-}
-
 .rhap_time {
     color: white !important;
+    visibility: visible !important;
+    z-index: 100 !important;
 }
-
 
 .rhap_controls-section {
     height: 0 !important;
@@ -31,7 +45,7 @@
     display: none !important;
 }
 
-.rhap_container{
+.rhap_container {
     margin-top: 25px;
     color: white;
     background-color: transparent !important;
@@ -44,13 +58,14 @@
     margin-top: -140px !important;
 }
 
-.rhap_container svg, .rhap_button-clear, .rhap_main-controls  {
+.rhap_container svg, .rhap_button-clear, .rhap_main-controls {
     height: 100px !important;
     width: 100px !important;
     color: white !important;
     position: absolute;
     top: 30%;
-    left: 34%;
+    left: 32%;
+    z-index: 100 !important;
 }
 
 .rhap_button-clear {
@@ -59,8 +74,19 @@
     overflow: unset !important;
 }
 
+.rhap_progress-bar {
+    background-color: #222 !important;
+    border-radius: 10px !important;
+}
 
+.rhap_progress-filled {
+    background-color: white !important;
+    border-radius: 10px !important;
+}
 
+.rhap_progress-indicator {
+    background: white !important;
+}
 
 .card-details-content {
     color: white;
@@ -70,7 +96,7 @@
     border-radius: 20px;
     width: 80%;
     max-width: fit-content;
-    min-width: 700px;
+    min-width: 600px;
     min-height: 150px;
 }
 
@@ -112,6 +138,7 @@
     margin-bottom: 5%;
     border-radius: 25px;
 }
+
 .card-details-image {
     border-radius: 25px;
     width: 500px;
@@ -120,7 +147,6 @@
     object-position: center;
     margin-bottom: 5%;
     background: linear-gradient(to top, rgba(0, 0, 0, 0.7), transparent);
-
 }
 
 .info {

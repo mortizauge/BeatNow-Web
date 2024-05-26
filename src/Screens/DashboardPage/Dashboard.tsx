@@ -33,6 +33,7 @@ function Dashboard() {
     const [message, setMessage] = useState('');
 
     useEffect(() => {
+        checkUsername();
         const username = UserSingleton.getInstance().getUsername();
         const token = localStorage.getItem("token");
 
@@ -51,6 +52,8 @@ function Dashboard() {
                 console.error('There was an error!', error);
             });
     }, []);
+
+
 
     const defaultPost: Post = {
         _id: '',
@@ -111,7 +114,7 @@ function Dashboard() {
             </div>
             <div className="content">
                 <div className="dash-header">
-                    <h1 onLoad={checkUsername} className="home">{UserSingleton.getInstance().getUsername()}'s dashboard</h1>
+                    <h1 className="home">{UserSingleton.getInstance().getUsername()}'s dashboard</h1>
                     <button className="uploadButton" onClick={handleClick} title="Upload a beat">
                         <i className="fa-solid fa-plus" />
                     </button>
