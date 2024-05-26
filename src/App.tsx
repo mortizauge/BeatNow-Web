@@ -1,5 +1,7 @@
 // src/App.tsx
 
+// APIS: http://217.182.70.161:6969/docs#/
+
 import React, { useEffect, useState, useRef } from 'react';
 import { BrowserRouter as Router, Route, Routes, useLocation } from 'react-router-dom';
 import LoginPage from './Screens/Login Page/LoginPage';
@@ -22,10 +24,10 @@ const CheckToken = () => {
     }
 
     const checkToken = () => {
-        if (intervalRef.current) {
+        if (intervalRef.current !== null) {
             clearInterval(intervalRef.current);
         }
-        intervalRef.current = setInterval(() => {
+        intervalRef.current = window.setInterval(() => {
             if (localStorage.getItem("token") === null) {
                 logout();
             }

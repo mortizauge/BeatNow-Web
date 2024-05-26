@@ -11,6 +11,7 @@ interface GlobalSelectProps {
     isMulti?: boolean;
     placeholder?: string;
     onChange?: (selectedOption: any) => void;
+    value: string | { value: string; label: string; }[]; // Add this line
     components?: any;
 }
 

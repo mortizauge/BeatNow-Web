@@ -17,7 +17,6 @@
     opacity: 1; /* Visible cuando se agrega la clase .visible */
 }
 
-
 .custom-popup-content {
     color: white;
     position: relative; /* Agregar esta línea para permitir el posicionamiento absoluto de los elementos hijos */

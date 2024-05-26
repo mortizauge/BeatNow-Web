@@ -11,10 +11,12 @@ import CustomPopup from "../../components/Popup/CustomPopup";
 import UserSingleton from "../../Model/UserSingleton";
 import Header from "../../Layout/Header/Header";
 import {signInOrRegisterWithGoogle} from "../../Model/firebaseConfig";
+import LoadingPopup from "../../components/Loading/Loading";
 
 
 function LoginPage() {
     const navigate = useNavigate();
+    const [loading, setLoading] = useState(false); // Nuevo estado para controlar el popup de carga
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
     const [showPopup, setShowPopup] = useState(false); // Nuevo estado para controlar el popup
@@ -49,7 +51,7 @@ function LoginPage() {
                 },
                 body: formData
             });
-
+            setLoading(false); // Oculta el popup de carga
             if (response.ok) {
                 await token(usr, pwd);
             } else {
@@ -77,6 +79,7 @@ function LoginPage() {
 
     const handleSubmit = async (event: React.FormEvent) => {
         event.preventDefault();
+        setLoading(true); // Muestra el popup de carga
         await handleSubmitWithParams(username, password);
     };
 
@@ -165,6 +168,12 @@ function LoginPage() {
                 <CustomPopup
                     message={message}
                     onClose={handleClose}
+                />
+            )}
+
+            {loading && (
+                <LoadingPopup
+                    message=""
                 />
             )}
 

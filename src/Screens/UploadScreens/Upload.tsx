@@ -71,6 +71,17 @@ function Upload() {
         beatDescription: "",
         beatPic: null
     });
+
+    useEffect(() => {
+        const savedGenre = localStorage.getItem("genre");
+        const savedMoods = JSON.parse(localStorage.getItem("moods") || "[]");
+        const savedInstruments = JSON.parse(localStorage.getItem("instruments") || "[]");
+
+        setGenre(savedGenre || "");
+        setMoods(savedMoods);
+        setInstruments(savedInstruments);
+    }, []);
+
     const [next, setNext] = useState(false);
 
 
@@ -147,9 +158,9 @@ function Upload() {
         if (validateForm()) {
             setSubmitted(true);
             setNext(true);
+            saveSelectedValues(); // Save selected values before navigating to the next phase
         }
     };
-
     const handleSubmit2 = async (event: React.FormEvent) => {
         event.preventDefault();
         if (selectedImgFile === null) {
@@ -259,6 +270,13 @@ function Upload() {
     };
 
     useEffect(() => {
+        setBeat(prevBeat => ({
+            ...prevBeat,
+            beatMoods: moods,
+        }));
+    }, [moods]);
+
+    useEffect(() => {
         setBeat({
             ...beat,
             beatMoods: moods,
@@ -266,6 +284,16 @@ function Upload() {
             beatInstruments: instruments,
         });
     }, [moods, genre, instruments]);
+
+    useEffect(() => {
+        const savedGenre = localStorage.getItem("genre");
+        const savedMoods = JSON.parse(localStorage.getItem("moods") || "[]");
+        const savedInstruments = JSON.parse(localStorage.getItem("instruments") || "[]");
+
+        setGenre(savedGenre || "");
+        setMoods(savedMoods);
+        setInstruments(savedInstruments);
+    }, []);
 
 
 
@@ -299,6 +327,12 @@ function Upload() {
     const removeImage = (event: React.MouseEvent) => {
         event.stopPropagation();
         setSelectedImgFile(null);
+    };
+
+    const saveSelectedValues = () => {
+        localStorage.setItem("genre", genre);
+        localStorage.setItem("moods", JSON.stringify(moods));
+        localStorage.setItem("instruments", JSON.stringify(instruments));
     };
 
     // Controlador de eventos para el cambio en el elemento de entrada del archivo
@@ -508,6 +542,7 @@ function Upload() {
                                             isSearchable={true}
                                             isMulti={false}
                                             placeholder="Genres"
+                                            value={genre} // Asegúrate de que el valor sea un objeto con las propiedades 'value' y 'label'
                                             onChange={(selected) => setGenre(selected ? selected.value : '')}
                                         />
 
@@ -516,18 +551,18 @@ function Upload() {
                                             isSearchable={true}
                                             isMulti={true}
                                             placeholder="Mood"
-                                            onChange={(selected) => setMoods(selected ? selected.value : [])}
+                                            value={moods.map(mood => ({ value: mood, label: mood }))} // Asegúrate de que el valor sea un array de objetos con las propiedades 'value' y 'label'
+                                            onChange={(selected) => setMoods(selected ? selected.map((item: { value: string }) => item.value) : [])}
                                         />
-
 
                                         <GlobalSelect
                                             options={instrumentsList}
                                             isSearchable={true}
                                             isMulti={true}
                                             placeholder="Instruments"
+                                            value={instruments.map(instrument => ({ value: instrument, label: instrument }))} // Asegúrate de que el valor sea un array de objetos con las propiedades 'value' y 'label'
                                             onChange={(selected) => setInstruments(selected ? selected.map((item: { value: string }) => item.value) : [])}
-                                        />
-                                    </form>
+                                        />                                    </form>
                                 </section>
                                 <section className="caption-and-button">
                                     <form className="next-form" onSubmit={handleSubmit1}>

@@ -3,6 +3,8 @@ import { Link } from "react-router-dom";
 import logo from "../../assets/Logo.png";
 import UserSingleton from "../../Model/UserSingleton";
 import { motion, Variants } from "framer-motion";
+import CustomPopup from "../../components/Popup/CustomPopup";
+import App from "../../App";
 import "./Header.css";
 
 const itemVariants: Variants = {
@@ -15,6 +17,8 @@ const itemVariants: Variants = {
 };
 
 function Header() {
+    const [message, setMessage] = useState("");
+    const [showPopup, setShowPopup] = useState(false);
     const user = UserSingleton.getInstance();
     const [dropdownOpen, setDropdownOpen] = useState(false);
     const [closing, setClosing] = useState(false);
@@ -54,7 +58,18 @@ function Header() {
         localStorage.removeItem("token");
         UserSingleton.getInstance().clear();
         window.location.href = "/";
-    }
+    };
+
+    const notAvailable = () => {
+        setMessage("This feature is not available yet.");
+        setShowPopup(true);
+    };
+
+    const closePopup = () => {
+        setShowPopup(false);
+    };
+
+
 
     return (
         <header className="header">
@@ -77,8 +92,8 @@ function Header() {
                         <img src={user.photoProfile} alt="Profile"/>
                         {dropdownOpen && (
                             <div className={`dropdown-content ${closing ? 'close' : 'open'}`}>
-                                <a>Perfil</a>
-                                <a>Ajustes</a>
+                                <a onClick={notAvailable}>Perfil</a>
+                                <a onClick={notAvailable}>Ajustes</a>
                                 <a onClick={handleLogout}>Cerrar sesión</a>
                             </div>
                         )}
