@@ -1,0 +1,55 @@
+.passwordInputs-Forgot {
+    display: flex;
+    width: 5%;
+    align-items: center;
+    text-align: center;
+    justify-content: space-between; /* Para separar los campos */
+    margin-bottom: 25px;
+}
+
+.forgotPwdContent {
+    display: grid;
+    grid-auto-columns: max-content;
+    justify-content: center;
+    margin-top: 30px;
+    margin-left: 10%;
+    margin-right: 11%;
+    text-align: center;
+    align-items: center;
+    width: 50%;
+    max-width: 30%;
+}
+
+.passwordInputs-Forgot {
+    display: flex;
+    width: 5%;
+    align-items: center;
+    text-align: center;
+    margin-bottom: 25px;
+    flex-direction: column;
+
+}
+
+.passwordInputs-Forgot input{
+    padding: 20px;
+    height: 25%;
+    border-radius: 15px;
+    margin-bottom: 70%;
+    margin-left: 10px;
+    margin-right: 10px;
+    background-color: #494949;
+    color: white;
+    border-width: 0;
+    min-width: 400px;
+
+}
+
+.forgot-form {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    margin-top: -100px;
+    margin-bottom: 20px;
+}
+

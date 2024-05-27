@@ -132,12 +132,14 @@ const GlobalSelect: React.FC<GlobalSelectProps> = ({
                         }),
                         menu: (provided) => ({
                             ...provided,
+                            zIndex: '3000',
                             borderRadius: '15px',
                             maxHeight: '225px',
                             boxShadow: '0 5px 20px -2px #111',
                         }),
                         menuList: (base) => ({
                             ...base,
+                            zIndex: '3000',
                             margin: '8px 10px 8px 8px',
                             borderRadius: '15px',
                             maxHeight: '205px',

@@ -287,6 +287,7 @@ input[type=number]::-webkit-inner-spin-button {
     height: 100%;
     background-image: url("data:image/svg+xml,%3csvg width='100%25' height='100%25' xmlns='http://www.w3.org/2000/svg'%3e%3crect width='100%25' height='100%25' fill='none' rx='25' ry='25' stroke='%23A5A5A5FF' stroke-width='10' stroke-dasharray='30%2c50' stroke-dashoffset='900' stroke-linecap='square'/%3e%3c/svg%3e");
     border-radius: 25px;
+    cursor: pointer;
 }
 
 .next-caption {
@@ -383,6 +384,8 @@ input[type=number]::-webkit-inner-spin-button {
     width: 100%;
 }
 
+
+
 .transition-leave {
     opacity: 1;
     transform: translateY(0);
@@ -402,6 +405,7 @@ input[type=number]::-webkit-inner-spin-button {
     margin-top: -2%;
     display: flex;
     width: 100%; /* Ocupa todo el ancho disponible */
+    z-index: 800;
 }
 .tab-indicator {
     left: calc(50% - 10px);

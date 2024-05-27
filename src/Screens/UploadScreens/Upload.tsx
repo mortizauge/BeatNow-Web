@@ -150,6 +150,13 @@ function Upload() {
         }
     }, [selectedMusicFile]);
 
+    useEffect(() => {
+        setBeat(prevBeat => ({
+            ...prevBeat,
+            beatDescription: description,
+        }));
+    }, [description]);
+
 
 
     const handleSubmit1 = (event: FormEvent) => {
@@ -210,8 +217,8 @@ function Upload() {
         try {
             const response = await axios.post(url, formData, { headers });
             if (response.status === 200) {
-                console.log('Beat uploaded successfully');
-                setMessage("Beat uploaded successfully");
+                console.log('Beat uploaded successfully.');
+                setMessage("Beat uploaded successfully.");
                 setShowPopup(true);
                 setSuccessfulUpload(true);
             }
@@ -296,6 +303,14 @@ function Upload() {
     }, []);
 
 
+    // para debugar el spinner:
+    /*
+    useEffect( () => {
+        setIsLoading(true);
+        setShowLoading(true);
+    });
+     */
+
 
     async function getUserInfo(token: string): Promise<any> {
         const url = 'http://217.182.70.161:6969/v1/api/users/users/me';
@@ -353,13 +368,15 @@ function Upload() {
         const file = event.target.files ? event.target.files[0] : null;
         if (file) {
             const fileType = file.type;
-            const validImageTypes = ['image/gif', 'image/jpeg', 'image/png'];
+            const validImageTypes = ['image/gif', 'image/jpeg'];
             if (validImageTypes.includes(fileType)) {
                 setSelectedImgFile(file);
                 setBeat({
                     ...beat,
                     beatPic: file
                 });
+
+
             } else {
                 setMessage("This file format is not supported.");
                 setShowPopup(true);

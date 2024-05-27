@@ -1,24 +1,17 @@
 import React, { useState, ChangeEvent, FormEvent, FocusEvent } from 'react';
-import './SignUpPage.css';
+import './ForgotPwdPage.css';
 import { Link } from 'react-router-dom';
 import axios from 'axios';
 import logo from "../../assets/Logo.png";
 import logo2 from "../../assets/Frame 2.png";
-import  signInOrRegisterWithGoogle  from "../../Screens/Login Page/LoginPage";
+import { signInOrRegisterWithGoogle } from "../../Model/firebaseConfig";
 import CustomPopup from "../../components/Popup/CustomPopup";
 import Header from "../../Layout/Header/Header";
 import LoginPage from "../../Screens/Login Page/LoginPage";
-import {useNavigate} from "react-router-dom";
-import VerifyPopup from "../../components/VerifyPopup/VerifyPopup";
-import LoadingPopup from "../../components/Loading/Loading";
 
 const passwordRequirements = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*]).{8,20}$/;
 
-function SignUpPage() {
-    const navigate = useNavigate();
-    const [token, setToken] = useState('');
-    const [showVerify, setShowVerify] = useState(false);
-    const [showLoading, setShowLoading] = useState(false);
+function ForgotPwdPage() {
     const [full_name, setFullName] = useState('');
     const [username, setUsername] = useState('');
     const [email, setEmail] = useState('');
@@ -111,36 +104,8 @@ function SignUpPage() {
         setConfirmPassword(event.target.value);
     };
 
-    const getToken = async () => {
-        try {
-            const response = await axios.post(
-                'http://217.182.70.161:6969/token',
-                new URLSearchParams({
-                    grant_type: '',
-                    username: username,
-                    password: password,
-                    scope: '',
-                    client_id: '',
-                    client_secret: ''
-                }),
-                {
-                    headers: {
-                        'Content-Type': 'application/x-www-form-urlencoded',
-                        'accept': 'application/json'
-                    }
-                }
-            );
-            return response.data.access_token;
-        } catch (error) {
-            console.error('Error obtaining token:', error);
-            return null;
-        }
-    };
-
     const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
         event.preventDefault();
-        setShowLoading(true);
-        console.log(token);
 
         let message = '';
         if (full_name === '' || full_name.length > 40) {
@@ -168,42 +133,14 @@ function SignUpPage() {
                 });
 
                 console.log(response.data);
-
-                // Obtain token
-                setToken(await getToken());
-                if (!token) {
-                    throw new Error('Failed to obtain token');
-                }
-
-                // Send confirmation email
-                try {
-                    await axios.post(
-                        'http://217.182.70.161:6969/v1/api/mail/send-confirmation/',
-                        {},
-                        {
-                            headers: {
-                                'accept': 'application/json',
-                                'Authorization': `Bearer ${token}`
-                            }
-                        }
-                    );
-                    setRegistrationError('');
-                    setShowLoading(false);
-
-
-
-                    setShowVerify(true);
-                    return;
-                } catch (emailError) {
-                    console.error('Error sending confirmation email:', emailError);
-                    message = 'Registration succeeded, but failed to send confirmation email.';
-                }
+                setRegistrationError('');
+                window.location.href = "/login";
+                return;
             } catch (error) {
                 console.error('Error during registration:', error);
                 message = 'Registration failed. Please try again.';
             }
         }
-        setShowLoading(false);
 
         setMessage(message);
         setShowPopup(true);
@@ -222,50 +159,13 @@ function SignUpPage() {
                     onClose={handleClose}
                 />
             )}
-
-            {showLoading && (
-                <LoadingPopup
-                    message={""}
-                />
-            )}
-
-            {showVerify && (
-                <VerifyPopup
-                    token={getToken().toString()}/>
-            )}
             <Header />
             <div className="centerDiv2">
                 <main>
-                    <section className="registerContent">
-                        <h2>Create New Account</h2>
-                        <p>Please fill in the form to continue</p>
-                        <form className="register-form" onSubmit={handleSubmit}>
-                            <input
-                                type="text"
-                                value={full_name}
-                                onChange={handleFullNameChange}
-                                placeholder="Full Name"
-                                maxLength={40}
-                            />
-                            <div className="passwordInputs">
-                                <input
-                                    type="text"
-                                    value={username}
-                                    onChange={handleUsernameChange}
-                                    onBlur={handleUsernameBlur}
-                                    placeholder="Username"
-                                    maxLength={16}
-                                />
-                                <input
-                                    type="email"
-                                    value={email}
-                                    onChange={handleEmailChange}
-                                    onBlur={handleEmailBlur}
-                                    placeholder="Email"
-                                    maxLength={40}
-                                />
-                            </div>
-                            <div className="passwordInputs">
+                    <section className="forgotPwdContent">
+                        <h2>Confirm your new password</h2>
+                        <form className="forgot-form" onSubmit={handleSubmit}>
+                            <div className="passwordInputs-Forgot">
                                 <input
                                     type="password"
                                     value={password}
@@ -283,14 +183,15 @@ function SignUpPage() {
                             </div>
 
                             <button className="submitButton2" type="submit">
-                                Sign up
+                                Change Password
                             </button>
+
 
                             <div className="signUpText">
                                 <h6>
-                                    Already have an account?{' '}
+                                    Or go back to{' '}
                                     <Link className="signIn" to="/login">
-                                        Sign in
+                                        sign in
                                     </Link>
                                 </h6>
                             </div>
@@ -308,4 +209,4 @@ function SignUpPage() {
     );
 }
 
-export default SignUpPage;
+export default ForgotPwdPage;

@@ -28,6 +28,7 @@
     "react-tag-input-component": "^2.0.2",
     "react-tagsinput": "^3.20.3",
     "react-transition-group": "^4.4.5",
+    "react-verification-input": "^4.1.2",
     "realtime-bpm-analyzer": "^4.0.2"
   },
   "devDependencies": {

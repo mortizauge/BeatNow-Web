@@ -1,6 +1,6 @@
 // src/components/LoginPage.tsx
 
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import './LoginPage.css';
 import logo from "../../assets/Logo.png";
 import logo2 from "../../assets/Frame 2.png";
@@ -12,21 +12,25 @@ import UserSingleton from "../../Model/UserSingleton";
 import Header from "../../Layout/Header/Header";
 import {signInOrRegisterWithGoogle} from "../../Model/firebaseConfig";
 import LoadingPopup from "../../components/Loading/Loading";
+import VerifyPopup from "../../components/VerifyPopup/VerifyPopup";
 
 
 function LoginPage() {
     const navigate = useNavigate();
+    const [showVerifyPopup, setShowVerifyPopup] = useState(false);
     const [loading, setLoading] = useState(false); // Nuevo estado para controlar el popup de carga
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
     const [showPopup, setShowPopup] = useState(false); // Nuevo estado para controlar el popup
     const [message, setMessage] = useState(''); // Nuevo estado para mostrar el mensaje
 
+
     interface UserData {
         full_name: string;
         username: string;
         email: string;
         id: string;
+        is_active: boolean;
     }
 
     const handleUsernameChange = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -106,6 +110,12 @@ function LoginPage() {
                 localStorage.setItem('token', data.access_token);
                 console.log(data.access_token);
                 await getUserInfo();
+                if (!UserSingleton.getInstance().getIsActive()) {
+                    setShowVerifyPopup(true);
+                }
+                else {
+                    navigateToUpload(data.access_token);
+                }
             } else {
                 // El inicio de sesión falló
                 // Manejar el error, por ejemplo, mostrar un mensaje de error al usuario
@@ -132,8 +142,9 @@ function LoginPage() {
                 user.setUsername(data.username);
                 user.setEmail(data.email);
                 user.setId(data.id);
+                user.setIsActive(data.is_active);
 
-                navigateToUpload(token);
+                // navigateToUpload(token);
                 return data;
             }
         } catch (error: any) {
@@ -173,8 +184,12 @@ function LoginPage() {
 
             {loading && (
                 <LoadingPopup
-                    message=""
+                    message={""}
                 />
+            )}
+
+            {showVerifyPopup && (
+                <VerifyPopup />
             )}
 
             <Header />
@@ -203,7 +218,7 @@ function LoginPage() {
                                 onChange={handlePasswordChange}
                                 placeholder="Password"
                             />
-                            <Link className={"forgotPwd"} to={"/forgot"}>Forgot password?</Link>
+                            <Link className={"forgotPwd"} to={"/forgotPwd"}>Forgot password?</Link>
                             <button className={"submitButton"} type={"submit"}> Sign in</button>
                             <div className={"dividerHori"}></div>
                             <div className={"socials"}>

@@ -12,6 +12,7 @@ import Upload from "./Screens/UploadScreens/Upload";
 import UploadNext from "./Screens/UploadScreens/Upload2/UploadNext";
 import Dashboard from "./Screens/DashboardPage/Dashboard";
 import CustomPopup from './components/Popup/CustomPopup';
+import ForgotPwdPage from "./Screens/ForgotPwd Page/ForgotPwdPage";
 
 const CheckToken = () => {
     const timeout = 3000;
@@ -24,9 +25,6 @@ const CheckToken = () => {
     }
 
     const checkToken = () => {
-        if (intervalRef.current !== null) {
-            clearInterval(intervalRef.current);
-        }
         intervalRef.current = window.setInterval(() => {
             if (localStorage.getItem("token") === null) {
                 logout();
@@ -35,7 +33,10 @@ const CheckToken = () => {
     }
 
     useEffect(() => {
-        if (location.pathname !== "/" && location.pathname !== "/login" && location.pathname !== "/register") {
+        if (location.pathname !== "/" &&
+            location.pathname !== "/login" &&
+            location.pathname !== "/register" &&
+            location.pathname !== "/forgotPwd") {
             checkToken();
         }
         return () => {
@@ -62,6 +63,7 @@ function App() {
                 <Route path="*" element={<Landing />} />
                 <Route path="/Upload" element={<Upload />} />
                 <Route path={"/Dashboard"} element={<Dashboard />} />
+                <Route path={"/ForgotPwd"} element={<ForgotPwdPage />} />
             </Routes>
         </Router>
     );

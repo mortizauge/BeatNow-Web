@@ -7,6 +7,7 @@ import UserSingleton from "../../Model/UserSingleton";
 import "./Dashboard.css";
 import CardDetails from "../../components/CardDetails/CardDetails";
 import CustomPopup from "../../components/Popup/CustomPopup";
+import {useNavigate} from "react-router-dom";
 
 interface Post {
     _id: string;
@@ -24,6 +25,8 @@ interface Post {
 }
 
 function Dashboard() {
+    const navigate = useNavigate();
+    const [tokenExists, setTokenExists] = useState(true);
     const [posts, setPosts] = useState<Post[]>([]);
     const [popularPosts, setPopularPosts] = useState<Post[]>([]);
     const [currentTime, setCurrentTime] = useState(new Date());
@@ -53,6 +56,31 @@ function Dashboard() {
             });
     }, []);
 
+    useEffect(() => {
+        const token = localStorage.getItem("token");
+
+        const url = "http://217.182.70.161:6969/v1/api/users/users/me";
+        const headers = {
+            accept: "application/json",
+            Authorization: `Bearer ${token}`,
+        };
+        axios
+            .get(url, { headers })
+            .then((response) => {
+                if (response.status === 200) {
+
+                    console.log("Información del usuario:", response.data);
+                }
+            })
+            .catch((error) => {
+                console.error("Error al obtener la información del usuario.");
+                setTokenExists(false);
+                setShowPopup(true);
+                localStorage.removeItem("token");
+                navigate("/login");
+            });
+    }, [navigate]);
+
 
 
     const defaultPost: Post = {
@@ -81,7 +109,7 @@ function Dashboard() {
     }, []);
 
     function handleClick() {
-        window.location.href = "/Upload";
+        navigate("/Upload", { state: { token: localStorage.getItem("token") } });
     }
 
     const handleCardClick = (postId: string, layoutId: string) => {
@@ -100,7 +128,7 @@ function Dashboard() {
 
     function checkUsername() {
         if (UserSingleton.getInstance().getUsername() === "" || UserSingleton.getInstance().getUsername() === null) {
-            setMessage("You must be logged in to access this page.");
+            setMessage("Session has expired, redirecting to landing page.");
             setShowPopup(true);
         }
     }
@@ -121,10 +149,14 @@ function Dashboard() {
                     <h1 className="rt-clock">{currentTime.toLocaleTimeString('en-US', { hour12: false })}</h1>
                 </div>
 
-                <div className="section-container">
-                    <h3>Recent Uploads</h3>
-                    <div className="cards-container">
-                        {posts.sort((a, b) => new Date(b.publication_date).getTime() - new Date(a.publication_date).getTime()).map((post, index) => (
+                {posts.length === 0 ? (
+                    <h2>Your dashboard looks empty...<br/>Try uploading some beats, share your creativity!</h2>
+                ) : (
+                    <>
+                    <div className="section-container">
+                        <h3>Recent Uploads</h3>
+                        <div className="cards-container">
+                            {posts.sort((a, b) => new Date(b.publication_date).getTime() - new Date(a.publication_date).getTime()).map((post, index) => (
                             <motion.div
                                 className={`card ${selectedLayoutId === `post-${index}` ? 'hidden' : ''}`}
                                 key={post._id}
@@ -139,14 +171,14 @@ function Dashboard() {
                                 <h4><b>{post.title}</b></h4>
                                 <p>{new Date(post.publication_date).toLocaleDateString()}</p>
                             </motion.div>
-                        ))}
+                            ))}
+                        </div>
                     </div>
-                </div>
 
-                <div className="section-container">
-                    <h3>Popular Uploads</h3>
-                    <div className="cards-container">
-                        {popularPosts.map((post, index) => (
+                    <div className="section-container">
+                        <h3>Popular Uploads</h3>
+                        <div className="cards-container">
+                            {popularPosts.map((post, index) => (
                             <motion.div
                                 className={`card ${selectedLayoutId === `popular-${index}` ? 'hidden' : ''}`}
                                 key={post._id}
@@ -161,9 +193,11 @@ function Dashboard() {
                                 <h4><b>{post.title}</b></h4>
                                 <p>{new Date(post.publication_date).toLocaleDateString()}</p>
                             </motion.div>
-                        ))}
+                            ))}
+                        </div>
                     </div>
-                </div>
+                    </>
+                )}
             </div>
             <AnimatePresence>
                 {selectedPost && selectedLayoutId && (

@@ -20,6 +20,7 @@ function Header() {
     const [message, setMessage] = useState("");
     const [showPopup, setShowPopup] = useState(false);
     const user = UserSingleton.getInstance();
+    const [hasPhoto, setHasPhoto] = useState(false);
     const [dropdownOpen, setDropdownOpen] = useState(false);
     const [closing, setClosing] = useState(false);
     const dropdownRef = useRef<HTMLDivElement | null>(null);
@@ -35,6 +36,21 @@ function Header() {
         return () => {
             document.removeEventListener("mousedown", handleClickOutside);
         };
+    }, []);
+
+    useEffect(() => {
+        // detectar si se ha recibido bien la foto de perfil
+        fetch(user.photoProfile)
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Network response was not ok');
+                }
+                setHasPhoto(true);
+            })
+            .catch(error => {
+                console.error('There has been a problem with your fetch operation:', error);
+                setHasPhoto(false);
+            });
     }, []);
 
     const toggleDropdown = () => {
@@ -84,7 +100,7 @@ function Header() {
                     </Link>
                 )}
             </div>
-            {localStorage.getItem("token") === null ? (
+            {!hasPhoto ? (
                 <Link className="buttonSignUp" to="/register">Sign up</Link>
             ) : (
                 <div className="nav-links">

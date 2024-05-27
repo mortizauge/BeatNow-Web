@@ -5,6 +5,7 @@ class UserSingleton {
     private email: string;
     private id: string;
     public photoProfile: string;
+    public is_active: boolean;
 
     private constructor() {
         this.full_name = '';
@@ -12,6 +13,7 @@ class UserSingleton {
         this.email = '';
         this.id = '';
         this.photoProfile = this.generatePhotoProfileUrl();
+        this.is_active = false;
     }
 
     public static getInstance(): UserSingleton {
@@ -54,6 +56,21 @@ class UserSingleton {
     public getId() {
         return this.id;
     }
+
+    public getPhotoProfile() {
+        return this.photoProfile;
+    }
+
+    public setIsActive(is_active: boolean) {
+        this.is_active = is_active;
+    }
+
+    public getIsActive() {
+        return this.is_active;
+    }
+
+
+
     private generatePhotoProfileUrl(): string {
         return `http://172.203.251.28/beatnow/${this.id}/photo_profile/photo_profile.png`;
     }
@@ -64,6 +81,7 @@ class UserSingleton {
         this.email = '';
         this.id = '';
         this.photoProfile = this.generatePhotoProfileUrl();
+        this.is_active = false;
     }
 }
 

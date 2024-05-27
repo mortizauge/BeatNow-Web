@@ -40,7 +40,7 @@
     height: 100px;
     border: 10px solid #434343;
     border-radius: 100%;
-    border-top: 10px solid #77298f;
+    border-top: 10px solid #af1ddd;
     animation: spin 2s backwards infinite;
 }
 
