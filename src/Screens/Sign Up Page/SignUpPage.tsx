@@ -1,4 +1,4 @@
-import React, { useState, ChangeEvent, FormEvent, FocusEvent } from 'react';
+import React, {useState, ChangeEvent, FormEvent, FocusEvent, useEffect} from 'react';
 import './SignUpPage.css';
 import { Link } from 'react-router-dom';
 import axios from 'axios';
@@ -34,6 +34,7 @@ function SignUpPage() {
     const handleFullNameChange = (event: ChangeEvent<HTMLInputElement>) => {
         setFullName(event.target.value);
     };
+
 
     const handleUsernameChange = (event: ChangeEvent<HTMLInputElement>) => {
         setUsername(event.target.value);
@@ -171,12 +172,10 @@ function SignUpPage() {
 
                 // Obtain token
                 setToken(await getToken());
-                if (!token) {
-                    throw new Error('Failed to obtain token');
-                }
 
                 // Send confirmation email
                 try {
+                    console.log(token);
                     await axios.post(
                         'http://217.182.70.161:6969/v1/api/mail/send-confirmation/',
                         {},
@@ -189,14 +188,14 @@ function SignUpPage() {
                     );
                     setRegistrationError('');
                     setShowLoading(false);
-
-
-
                     setShowVerify(true);
                     return;
                 } catch (emailError) {
                     console.error('Error sending confirmation email:', emailError);
-                    message = 'Registration succeeded, but failed to send confirmation email.';
+                    setRegistrationError('');
+                    setShowLoading(false);
+                    setShowVerify(true);
+                    return;
                 }
             } catch (error) {
                 console.error('Error during registration:', error);
@@ -231,7 +230,7 @@ function SignUpPage() {
 
             {showVerify && (
                 <VerifyPopup
-                    token={getToken().toString()}/>
+                    token={token}/>
             )}
             <Header />
             <div className="centerDiv2">

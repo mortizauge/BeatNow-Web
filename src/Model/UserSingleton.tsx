@@ -16,6 +16,7 @@ class UserSingleton {
         this.is_active = false;
     }
 
+
     public static getInstance(): UserSingleton {
         if (!UserSingleton.instance) {
             UserSingleton.instance = new UserSingleton();

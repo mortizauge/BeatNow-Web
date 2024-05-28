@@ -23,6 +23,7 @@ const VerifyPopup: React.FC<VerifyPopupProps> = ({token}) =>{
         }
     }, []);
 
+
     const handleClose = () => {
         setIsVisible(false);
     };
@@ -59,7 +60,7 @@ const VerifyPopup: React.FC<VerifyPopupProps> = ({token}) =>{
                 // Handle success if needed
             } else {
                 console.error('Failed to verify code');
-                // Handle failure if needed
+                console.error(await response.json());
             }
         } catch (error) {
             console.error('Error verifying code:', error);
