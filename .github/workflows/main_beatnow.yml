@@ -1,61 +1,59 @@
-name: Azure Static Web Apps CI/CD
+name: Build and deploy Node.js app to Azure Web App - beatnow
 
 on:
   push:
     branches:
       - main
-  pull_request:
-    types: [opened, synchronize, reopened, closed]
-    branches:
-      - main
+  workflow_dispatch:
 
 jobs:
-  build_and_deploy_job:
-    if: github.event_name == 'push' || (github.event_name == 'pull_request' && github.event.action != 'closed')
+  build:
     runs-on: ubuntu-latest
-    name: Build and Deploy Job
-    steps:
-      - uses: actions/checkout@v3
-        with:
-          submodules: true
-          lfs: false
 
-      # Set up Node.js environment
-      - name: Set up Node.js
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Node.js version
         uses: actions/setup-node@v3
         with:
-          node-version: '20.11' # Usa la versión adecuada para tu proyecto
+          node-version: '20.x'
 
-      # Install dependencies
       - name: Install dependencies
         run: npm ci
 
-      # Build the project
       - name: Build the project
-        run: npx tsc && npx vite build
+        run: npm run build
 
-      - name: Build And Deploy
-        id: builddeploy
-        uses: Azure/static-web-apps-deploy@v1
+      - name: Run tests
+        run: npm test
+
+      - name: Zip artifact for deployment
+        run: zip -r release.zip ./*
+
+      - name: Upload artifact for deployment job
+        uses: actions/upload-artifact@v3
         with:
-          azure_static_web_apps_api_token: ${{ secrets.AZURE_STATIC_WEB_APPS_API_TOKEN_LIVELY_MUD_0233E6C03 }}
-          repo_token: ${{ secrets.GITHUB_TOKEN }} # Used for Github integrations (i.e. PR comments)
-          action: "upload"
-          ###### Repository/Build Configurations - These values can be configured to match your app requirements. ######
-          # For more information regarding Static Web App workflow configurations, please visit: https://aka.ms/swaworkflowconfig
-          app_location: "/" # App source code path
-          api_location: "" # Api source code path - optional
-          output_location: "build" # Built app content directory - optional
-          ###### End of Repository/Build Configurations ######
+          name: node-app
+          path: release.zip
 
-  close_pull_request_job:
-    if: github.event_name == 'pull_request' && github.event.action == 'closed'
+  deploy:
     runs-on: ubuntu-latest
-    name: Close Pull Request Job
+    needs: build
+
     steps:
-      - name: Close Pull Request
-        id: closepullrequest
-        uses: Azure/static-web-apps-deploy@v1
+      - name: Download artifact from build job
+        uses: actions/download-artifact@v3
         with:
-          azure_static_web_apps_api_token: ${{ secrets.AZURE_STATIC_WEB_APPS_API_TOKEN_LIVELY_MUD_0233E6C03 }}
-          action: "close"
+          name: node-app
+
+      - name: Unzip artifact for deployment
+        run: unzip release.zip
+
+      - name: 'Deploy to Azure Web App'
+        id: deploy-to-webapp
+        uses: azure/webapps-deploy@v2
+        with:
+          app-name: 'beatnow'
+          slot-name: 'Production'
+          publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE_A9D7D98B177D4415A07A146FB08B619A }}
+          package: .
