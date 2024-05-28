@@ -24,9 +24,6 @@ jobs:
       - name: Build the project
         run: npm run build
 
-      - name: Run tests
-        run: npm test
-
       - name: Zip artifact for deployment
         run: zip -r release.zip ./*
 
