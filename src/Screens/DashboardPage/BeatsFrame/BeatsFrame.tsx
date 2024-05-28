@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import BeatItem from "../../../components/BeatItems/BeatItem";
+//import BeatItem from "../../../components/BeatItems/BeatItem";
 import UserSingleton from "../../../Model/UserSingleton"; // Asegúrate de importar correctamente UserSingleton
 
 interface Beat {
@@ -34,7 +34,6 @@ const ListBeat: React.FC = () => {
   return (
     <div>
       <h1>Beats List</h1>
-      <BeatItem beats={beats} />
     </div>
   );
 }

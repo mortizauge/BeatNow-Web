@@ -9,7 +9,6 @@ import Landing from "./Screens/Landing Page/LandingPage";
 import SignUpPage from "./Screens/Sign Up Page/SignUpPage";
 import './App.css';
 import Upload from "./Screens/UploadScreens/Upload";
-import UploadNext from "./Screens/UploadScreens/Upload2/UploadNext";
 import Dashboard from "./Screens/DashboardPage/Dashboard";
 import CustomPopup from './components/Popup/CustomPopup';
 import ForgotPwdPage from "./Screens/ForgotPwd Page/ForgotPwdPage";

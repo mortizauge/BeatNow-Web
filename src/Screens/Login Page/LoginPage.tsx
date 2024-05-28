@@ -17,6 +17,7 @@ import VerifyPopup from "../../components/VerifyPopup/VerifyPopup";
 
 function LoginPage() {
     const navigate = useNavigate();
+    const [token, setToken] = useState<string | null>(''); // Nuevo estado para almacenar el token
     const [showVerifyPopup, setShowVerifyPopup] = useState(false);
     const [loading, setLoading] = useState(false); // Nuevo estado para controlar el popup de carga
     const [username, setUsername] = useState('');
@@ -57,7 +58,7 @@ function LoginPage() {
             });
             setLoading(false); // Oculta el popup de carga
             if (response.ok) {
-                await token(usr, pwd);
+                await getToken(usr, pwd);
             } else {
                 let message = '';
                 if (username === '' || password === '') {
@@ -88,7 +89,7 @@ function LoginPage() {
     };
 
 
-    async function token(usr: string, password: string) {
+    async function getToken(usr: string, password: string) {
         try {
             const formData = new URLSearchParams();
             formData.append('username', usr);
@@ -108,6 +109,7 @@ function LoginPage() {
                 const data = await response.json();
                 // El inicio de sesión fue exitoso
                 localStorage.setItem('token', data.access_token);
+                setToken(data.access_token);
                 console.log(data.access_token);
                 await getUserInfo();
                 if (!UserSingleton.getInstance().getIsActive()) {
@@ -188,8 +190,8 @@ function LoginPage() {
                 />
             )}
 
-            {showVerifyPopup && (
-                <VerifyPopup />
+            {showVerifyPopup && token && (
+                <VerifyPopup token={token} />
             )}
 
             <Header />
