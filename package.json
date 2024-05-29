@@ -6,7 +6,7 @@
   "proxy": "http://217.182.70.161:6969",
   "scripts": {
     "dev": "vite",
-    "build": "tsc && vite build",
+    "build": "tsc && npm build",
     "preview": "vite preview"
   },
   "dependencies": {
