@@ -22,6 +22,7 @@ interface Post {
     bpm: number;
     user_id: string;
     audio_format: string;
+    cover_format: string;
 }
 
 function Dashboard() {
@@ -96,6 +97,7 @@ function Dashboard() {
         bpm: 0,
         user_id: '',
         audio_format: '',
+        cover_format: ''
     };
 
 
@@ -167,7 +169,7 @@ function Dashboard() {
                                 exit={{ opacity: 0, y: 50 }}
                                 transition={{ duration: 0.3 }}
                             >
-                                <img className="post-picture" src={`http://172.203.251.28/beatnow/${UserSingleton.getInstance().getId()}/posts/${post._id}/caratula.jpg`} alt="Post" />
+                                <img className="post-picture" src={`http://172.203.251.28/beatnow/${UserSingleton.getInstance().getId()}/posts/${post._id}/caratula.${post.cover_format}`} alt="Post" />
                                 <h4><b>{post.title}</b></h4>
                                 <p>{new Date(post.publication_date).toLocaleDateString()}</p>
                             </motion.div>
@@ -189,7 +191,7 @@ function Dashboard() {
                                 exit={{ opacity: 0, y: 50 }}
                                 transition={{ duration: 0.3 }}
                             >
-                                <img className="post-picture" src={`http://172.203.251.28/beatnow/${UserSingleton.getInstance().getId()}/posts/${post._id}/caratula.jpg`} alt="Post" />
+                                <img className="post-picture" src={`http://172.203.251.28/beatnow/${UserSingleton.getInstance().getId()}/posts/${post._id}/caratula.${post.cover_format}`} alt="Post" />
                                 <h4><b>{post.title}</b></h4>
                                 <p>{new Date(post.publication_date).toLocaleDateString()}</p>
                             </motion.div>
@@ -203,7 +205,7 @@ function Dashboard() {
                 {selectedPost && selectedLayoutId && (
                     <CardDetails
                         post={selectedPost}
-                        image={`http://172.203.251.28/beatnow/${UserSingleton.getInstance().getId()}/posts/${selectedPost._id}/caratula.jpg`}
+                        image={`http://172.203.251.28/beatnow/${UserSingleton.getInstance().getId()}/posts/${selectedPost._id}/caratula.${selectedPost.cover_format}`}
                         audio={`http://172.203.251.28/beatnow/${UserSingleton.getInstance().getId()}/posts/${selectedPost._id}/audio.${selectedPost.audio_format}`}
                         layoutId={selectedLayoutId}
                         onClose={handleCloseCardDetails} />

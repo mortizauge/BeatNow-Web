@@ -45,47 +45,48 @@ const CardDetails: React.FC<CardDetailsProps> = ({ post, audio, image, layoutId,
                         <h1><b>{post.title}</b></h1>
                         <button className="card-closeBtn" onClick={onClose}>✖</button>
                     </div>
-                    <div
-                        className="card-image-container"
-                        onMouseEnter={() => setIsHovered(true)}
-                        onMouseLeave={() => setIsHovered(false)}
-                    >
-                        <div className={`card-image-gradient`}>
-                            <img className="card-details-image" src={image} alt="Cover Image" />
+                    <div className={"image-and-player"}>
+                        <div
+                            className="card-image-container"
+                            onMouseEnter={() => setIsHovered(true)}
+                            onMouseLeave={() => setIsHovered(false)}
+                        >
+                            <div className={`card-image-gradient`}>
+
+                                <img className="card-details-image" src={image} alt="Cover Image" />
+                            </div>
+                            <div className={`audio-player ${isHovered ? 'visible' : 'hidden'}`}>
+                                <AudioPlayer
+                                    autoPlay
+                                    loop={true}
+                                    src={audio}
+                                    showJumpControls={false}
+                                    showSkipControls={false}
+                                    showDownloadProgress={false}
+                                    customAdditionalControls={[]}
+                                    volume={0.20}
+                                    onPlay={e => console.log("onPlay")}
+                                />
+                            </div>
                         </div>
                     </div>
-                    <div className="card-audio-container">
-                    <div className={`audio-player ${isHovered ? 'visible' : 'hidden'}`} onMouseEnter={() => setIsHovered(true)} onMouseLeave={() => setIsHovered(false)}>                        <AudioPlayer
-                            autoPlay
-                            loop={true}
-                            src={audio}
-                            showJumpControls={false}
-                            showSkipControls={false}
-                            showDownloadProgress={false}
-                            customAdditionalControls={[]}
-                            volume={0.20}
-                            onPlay={e => console.log("onPlay")}
-                        />
-                    </div>
-                    </div>
                     <div className="card-details-info">
-                        <section>
+                        <section className="cd-sect">
                             <div className="info-data">
                                 <h4 className="info"><b>Genre:</b> {post.genre}</h4>
-                                <h4 className="info"><b>Moods:</b> {post.moods.join(', ').toString().replace(/[\[\]"]/g, '')}</h4>
-                                <h4 className="info"><b>Instruments:</b> {post.instruments.join(', ').toString().replace(/[\[\]"]/g, '')}</h4>
+                                <h4 className="info"><b>Moods:</b> {post.moods.join(', ').replace(/[\[\]"]/g, '')}</h4>
+                                <h4 className="info"><b>Instruments:</b> {post.instruments.join(', ').replace(/[\[\]"]/g, '')}</h4>
                                 <h4 className="info"><b>BPM:</b> {post.bpm}</h4>
                             </div>
                         </section>
-                        <section>
+                        <section className="cd-sect">
                             <div className="info-social">
-                                <h4 className="info"><b>Tags: </b> {post.tags.join(' ').toString().replace(/[\[\]"]/g, '')}</h4>
+                                <h4 className="info"><b>Tags:</b> {post.tags.join(' ').replace(/[\[\]"]/g, '')}</h4>
                                 <h4 className="info"><b>Likes:</b> {post.likes}</h4>
                                 <h4 className="info"><b>Saves:</b> {post.saves}</h4>
                             </div>
                         </section>
                     </div>
-
                 </motion.div>
             </AnimatePresence>
         </motion.div>

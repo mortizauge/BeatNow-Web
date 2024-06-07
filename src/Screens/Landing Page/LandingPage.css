@@ -6,8 +6,23 @@ html {
 
 
 .tryDiv {
-    margin: 50px 0 50px 0;
+    margin-top: 8%;
+}
 
+.qr-pic {
+    margin-top: 5%;
+    max-width: 250px;
+    height: auto;
+}
+
+.frame {
+    justify-self: start;
+    align-self: start;
+
+}
+
+.qr-pic:hover {
+    cursor: pointer;
 }
 
 
@@ -35,6 +50,7 @@ main {
     margin: 3%;
     background-color: #161616;
     border-radius: 30px;
+    justify-content: space-between;
 }
 
 section {
@@ -62,6 +78,11 @@ section {
     text-align: center;
     width: 50%;
     max-width: 30%;
+    align-self: center;
+}
+
+.h4-landing {
+    margin-bottom: 30px;
 }
 
 .contentLanding h1 {
@@ -77,6 +98,77 @@ section {
     text-decoration: none;
 }
 
+
+/* Estilos para pantallas de tamaño móvil (600px o menos) */
+@media only screen and (max-width: 600px) {
+    .centerDiv {
+        flex-direction: column !important;
+        margin: 10% !important;
+    }
+
+    .dl-btn {
+        margin: 7%;
+        width: 50%;
+        padding: 20px;
+        background-color: #ffffff;
+        color: #fff;
+        border: none;
+        border-radius: 20px;
+        cursor: pointer;
+        text-decoration: none;
+        transition: background-color 0.3s;
+    }
+    .dl-btn:hover {
+        background-color: rgb(181, 181, 181) !important;
+    }
+
+    .btn-pic{
+        max-width: 100px;
+        height: auto;
+    }
+
+
+    main {
+        padding: 0 !important;
+        flex-direction: column !important;
+    }
+
+    .studio-image {
+        margin: 5%;
+    }
+
+    .studio-image-PNG {
+        max-width: 90%;
+        border-radius: 20px;
+    }
+
+    .contentLanding {
+        padding: 2% 0;
+        margin-left: 0;
+        width: 90%;
+        max-width: 100%;
+    }
+
+    .qr-pic {
+        display: none;
+    }
+
+    .contentLanding h1 {
+        font-size: 2em;
+    }
+
+    .contentLanding p {
+        font-size: 1em;
+    }
+
+    .qr-pic {
+        max-width: 200px;
+    }
+
+    section {
+        width: 100%;
+    }
+}
 
 
 

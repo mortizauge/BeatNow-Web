@@ -36,6 +36,11 @@
     z-index: 100 !important;
 }
 
+.rhap_main rhap_stacked {
+    display: flex;
+    justify-content: center !important;
+}
+
 .rhap_controls-section {
     height: 0 !important;
     width: 0 !important;
@@ -55,7 +60,9 @@
 }
 
 .rhap_progress-section {
-    margin-top: -140px !important;
+    margin-top: 85% !important;
+    width: 90%;
+    align-self: center !important;
 }
 
 .rhap_container svg, .rhap_button-clear, .rhap_main-controls {
@@ -63,9 +70,11 @@
     width: 100px !important;
     color: white !important;
     position: absolute;
-    top: 30%;
-    left: 31%;
+    top: 40%;
+    left: 50%;
+    transform: translate(-50%, -50%);
     z-index: 100 !important;
+    align-self: center !important;
 }
 
 .rhap_button-clear {
@@ -94,9 +103,7 @@
     background-color: #3C0F4B;
     padding: 30px;
     border-radius: 20px;
-    width: 80%;
-    max-width: fit-content;
-    min-width: 600px;
+    width: 500px;
     min-height: 150px;
 }
 
@@ -107,6 +114,7 @@
     margin-bottom: 20px;
 }
 
+
 .card-details-info {
     justify-content: flex-start;
     display: flex;
@@ -116,16 +124,69 @@
     padding-left: 5%;
 }
 
+
 .card-image-container {
     position: relative;
-    border-radius: 20px;
-    justify-content: center;
     display: flex;
+    width: 400px; /* Ajusta según tus necesidades */
+    height: 400px; /* Ajusta según tus necesidades */
+    justify-content: center;
 }
 
-.card-image-gradient {
-    position: relative;
+.card-details-image {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center;
+    justify-self: center;
 }
+.card-details-image {
+    justify-self: center;
+    border-radius: 25px;
+    width: 400px;
+    height: 400px;
+    object-fit: cover;
+    object-position: center;
+    margin-bottom: 5%;
+    background: linear-gradient(to top, rgba(0, 0, 0, 0.7), transparent);
+}
+
+.audio-player {
+    position: absolute;
+    justify-self: center;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    visibility: visible !important;
+    transition: opacity 1s;
+}
+
+.audio-player.visible {
+    opacity: 1;
+    transition: opacity .7s;
+}
+
+.audio-player.hidden {
+    opacity: 0;
+    transition: opacity 1.2s;
+}
+
+.rhap_container svg, .rhap_button-clear, .rhap_main-controls {
+    height: 100px !important;
+    width: 100px !important;
+    color: white !important;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    z-index: 100 !important;
+}
+
+
 
 .card-image-gradient::after {
     content: "";
@@ -135,19 +196,10 @@
     width: 100%;
     height: 50%; /* Ajusta este valor para cambiar la altura del gradiente */
     background: linear-gradient(to top, rgba(0, 0, 0, 0.7), transparent);
-    margin-bottom: 5%;
     border-radius: 25px;
 }
 
-.card-details-image {
-    border-radius: 25px;
-    width: 500px;
-    height: 500px;
-    object-fit: cover;
-    object-position: center;
-    margin-bottom: 5%;
-    background: linear-gradient(to top, rgba(0, 0, 0, 0.7), transparent);
-}
+
 
 .info {
     font-size: 20px;
