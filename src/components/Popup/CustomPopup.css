@@ -13,6 +13,15 @@
     transition: opacity 0.15s ease; /* Transición de opacidad */
 }
 
+.image-and-player {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    margin-bottom: 5%;
+
+}
+
 .custom-popup.visible {
     opacity: 1; /* Visible cuando se agrega la clase .visible */
 }

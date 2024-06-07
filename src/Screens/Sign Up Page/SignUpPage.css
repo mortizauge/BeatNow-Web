@@ -149,3 +149,52 @@
     text-decoration: none;
     color: #8731E4;
 }
+
+
+@media only screen and (max-width: 600px) {
+
+    .registerContent {
+        display: grid;
+        grid-auto-columns: max-content;
+        justify-self: center;
+        text-align: center;
+        align-items: center;
+        width: 50%;
+        margin-left: 30%;
+    }
+
+    .register-form {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        padding: 20px;
+        margin-left: 5%;
+    }
+
+    .register-form input[type="text"],
+    .register-form input[type="password"],
+    .register-form input[type="email"] {
+        padding: 20px;
+        height: 30%;
+        border-radius: 15px;
+        margin-bottom: 5%;
+        background-color: #494949;
+        color: white;
+        border-width: 0;
+    }
+
+    main {
+        display: flex;
+        justify-content: center;
+    }
+
+
+    .dividerVert2 {
+        display: none;
+    }
+
+    .logoPngCenter2{
+        display: none;
+    }
+
+}

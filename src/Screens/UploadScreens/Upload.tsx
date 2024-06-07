@@ -368,7 +368,7 @@ function Upload() {
         const file = event.target.files ? event.target.files[0] : null;
         if (file) {
             const fileType = file.type;
-            const validImageTypes = ['image/gif', 'image/jpeg'];
+            const validImageTypes = ['image/gif', 'image/jpeg', 'image/jpg'];
             if (validImageTypes.includes(fileType)) {
                 setSelectedImgFile(file);
                 setBeat({
@@ -655,8 +655,7 @@ function Upload() {
                                                 <>
                                                     <h1 className="centered-text">Upload your cover art here</h1>
                                                     <h5 className="lower-centered-text">Supported formats: .jpg, .png,
-                                                        .gif,
-                                                        etc.
+                                                        .gif
                                                     </h5>
                                                 </>
                                             )}
