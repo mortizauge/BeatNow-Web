@@ -36,6 +36,11 @@
     z-index: 100 !important;
 }
 
+.rhap_main rhap_stacked {
+    display: flex;
+    justify-content: center !important;
+}
+
 .rhap_controls-section {
     height: 0 !important;
     width: 0 !important;
@@ -56,6 +61,8 @@
 
 .rhap_progress-section {
     margin-top: -140px !important;
+    width: 85%;
+    align-self: center !important;
 }
 
 .rhap_container svg, .rhap_button-clear, .rhap_main-controls {
@@ -63,9 +70,11 @@
     width: 100px !important;
     color: white !important;
     position: absolute;
-    top: 30%;
-    left: 31%;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
     z-index: 100 !important;
+    align-self: center !important;
 }
 
 .rhap_button-clear {
@@ -94,9 +103,7 @@
     background-color: #3C0F4B;
     padding: 30px;
     border-radius: 20px;
-    width: 80%;
-    max-width: fit-content;
-    min-width: 600px;
+    width: 500px;
     min-height: 150px;
 }
 
@@ -106,6 +113,7 @@
     align-items: center;
     margin-bottom: 20px;
 }
+
 
 .card-details-info {
     justify-content: flex-start;
@@ -119,8 +127,9 @@
 .card-image-container {
     position: relative;
     border-radius: 20px;
-    justify-content: center;
     display: flex;
+    justify-content: center;
+    align-items: center;
 }
 
 .card-image-gradient {
@@ -141,8 +150,8 @@
 
 .card-details-image {
     border-radius: 25px;
-    width: 500px;
-    height: 500px;
+    width: 400px;
+    height: 400px;
     object-fit: cover;
     object-position: center;
     margin-bottom: 5%;

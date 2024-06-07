@@ -2,25 +2,13 @@ import React, { useState, useEffect, useRef } from "react";
 import { Link } from "react-router-dom";
 import logo from "../../assets/Logo.png";
 import UserSingleton from "../../Model/UserSingleton";
-import { motion, Variants } from "framer-motion";
 import CustomPopup from "../../components/Popup/CustomPopup";
-import App from "../../App";
 import "./Header.css";
-
-const itemVariants: Variants = {
-    open: {
-        opacity: 1,
-        y: 0,
-        transition: { type: "spring", stiffness: 300, damping: 24 }
-    },
-    closed: { opacity: 0, y: 20, transition: { duration: 0.2 } }
-};
 
 function Header() {
     const [message, setMessage] = useState("");
     const [showPopup, setShowPopup] = useState(false);
     const user = UserSingleton.getInstance();
-    const [hasPhoto, setHasPhoto] = useState(false);
     const [dropdownOpen, setDropdownOpen] = useState(false);
     const [closing, setClosing] = useState(false);
     const dropdownRef = useRef<HTMLDivElement | null>(null);
@@ -36,21 +24,6 @@ function Header() {
         return () => {
             document.removeEventListener("mousedown", handleClickOutside);
         };
-    }, []);
-
-    useEffect(() => {
-        // detectar si se ha recibido bien la foto de perfil
-        fetch(user.photoProfile)
-            .then(response => {
-                if (!response.ok) {
-                    throw new Error('Network response was not ok');
-                }
-                setHasPhoto(true);
-            })
-            .catch(error => {
-                console.error('There has been a problem with your fetch operation:', error);
-                setHasPhoto(false);
-            });
     }, []);
 
     const toggleDropdown = () => {
@@ -85,12 +58,12 @@ function Header() {
         setShowPopup(false);
     };
 
-
+    const token = localStorage.getItem("token");
 
     return (
         <header className="header">
             <div className="logo">
-                {localStorage.getItem("token") === null ? (
+                {token === null ? (
                     <Link to="/">
                         <img className="logoPng" src={logo} alt="Logo"/>
                     </Link>
@@ -100,7 +73,7 @@ function Header() {
                     </Link>
                 )}
             </div>
-            {!hasPhoto ? (
+            {token === null ? (
                 <Link className="buttonSignUp" to="/register">Sign up</Link>
             ) : (
                 <div className="nav-links">
@@ -115,6 +88,9 @@ function Header() {
                         )}
                     </div>
                 </div>
+            )}
+            {showPopup && (
+                <CustomPopup message={message} onClose={closePopup} />
             )}
         </header>
     );

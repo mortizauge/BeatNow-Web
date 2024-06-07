@@ -69,7 +69,7 @@ const CardDetails: React.FC<CardDetailsProps> = ({ post, audio, image, layoutId,
                     </div>
                     </div>
                     <div className="card-details-info">
-                        <section>
+                        <section className={"cd-sect"}>
                             <div className="info-data">
                                 <h4 className="info"><b>Genre:</b> {post.genre}</h4>
                                 <h4 className="info"><b>Moods:</b> {post.moods.join(', ').toString().replace(/[\[\]"]/g, '')}</h4>
@@ -77,7 +77,7 @@ const CardDetails: React.FC<CardDetailsProps> = ({ post, audio, image, layoutId,
                                 <h4 className="info"><b>BPM:</b> {post.bpm}</h4>
                             </div>
                         </section>
-                        <section>
+                        <section className={"cd-sect"}>
                             <div className="info-social">
                                 <h4 className="info"><b>Tags: </b> {post.tags.join(' ').toString().replace(/[\[\]"]/g, '')}</h4>
                                 <h4 className="info"><b>Likes:</b> {post.likes}</h4>
