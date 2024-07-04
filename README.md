@@ -6,4 +6,4 @@ React based frontend for BeatNow's website.
 
 ###
 
-<video src="https://github.com/mortizauge/BeatNow-Web/blob/main/BN%20Demo.mp4" width="300" />
+![Video demo](https://github.com/mortizauge/BeatNow-Web/blob/main/BN%20Demo.mp4)
